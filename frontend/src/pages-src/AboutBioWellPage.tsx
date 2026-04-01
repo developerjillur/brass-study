@@ -194,7 +194,7 @@ const AboutBioWellPage = () => {
               and after the 90-day light therapy intervention. By tracking these
               changes alongside renal function lab panels and validated
               questionnaires, we can build a more comprehensive picture of how PBM
-              therapy affects overall wellbeing.
+              therapy affects overall well-being.
             </p>
             <p className="text-body text-muted-foreground leading-relaxed">
               Bio-Well provides a unique, non-intrusive data point that complements

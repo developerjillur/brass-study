@@ -94,7 +94,7 @@ const DailyLogPage = () => {
               Daily Therapy Log
             </h1>
             <p className="text-muted-foreground">
-              Study Day {participant.study_day ?? 0} • Track your daily PBM therapy sessions
+              Study Day {participant.study_day ?? 0} • Track your daily PBM therapy sessions (typical sessions are 20–30 minutes)
             </p>
           </div>
 

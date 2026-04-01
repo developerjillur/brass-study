@@ -116,22 +116,6 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          {/* Onboarding banner — participant only */}
-          {onboardingNeeded && userRole === "participant" && (
-            <div className="mb-6 p-5 bg-primary/5 rounded-xl border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-lg font-bold text-foreground">Join the Study</h2>
-                <p className="text-sm text-muted-foreground">
-                  Sign the IRB consent and complete baseline assessments to activate your study dashboard.
-                </p>
-              </div>
-              <Button onClick={() => router.push("/onboarding")} className="flex items-center gap-2">
-                <PlayCircle className="w-4 h-4" />
-                Get Started
-              </Button>
-            </div>
-          )}
-
           {/* My Profile & Study Timeline — very top */}
           {userRole === "participant" && (
             <div className="grid md:grid-cols-2 gap-3 mb-6">
@@ -155,6 +139,22 @@ const DashboardPage = () => {
                 <CalendarDays className="w-5 h-5 text-muted-foreground" />
                 <span className="text-sm font-medium text-foreground">Study Timeline</span>
               </div>
+            </div>
+          )}
+
+          {/* Onboarding banner — participant only */}
+          {onboardingNeeded && userRole === "participant" && (
+            <div className="mb-6 p-5 bg-primary/5 rounded-xl border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-bold text-foreground">Join the Study</h2>
+                <p className="text-sm text-muted-foreground">
+                  Sign the IRB consent and complete baseline assessments to activate your study dashboard.
+                </p>
+              </div>
+              <Button onClick={() => router.push("/onboarding")} className="flex items-center gap-2">
+                <PlayCircle className="w-4 h-4" />
+                Get Started
+              </Button>
             </div>
           )}
 

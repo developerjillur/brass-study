@@ -24,7 +24,13 @@ const NeedHelpButton = () => {
           <p className="text-sm text-muted-foreground mb-4">
             If you have questions about the study or need assistance, you can message the research team directly.
           </p>
-          <div className="space-y-2">
+          <div className="space-y-3">
+            <a
+              href="tel:+17608879181"
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/20 transition-colors"
+            >
+              📞 Call: (760) 887-9181
+            </a>
             {user && (
               <Button
                 variant="default"
@@ -38,9 +44,6 @@ const NeedHelpButton = () => {
                 Message Research Team
               </Button>
             )}
-            <p className="text-xs text-muted-foreground text-center">
-              Or call: <strong>(760) 887-9181</strong>
-            </p>
           </div>
         </div>
       )}

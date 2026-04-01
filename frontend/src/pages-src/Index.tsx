@@ -81,7 +81,7 @@ const Index = () => {
               What Is This Study About?
             </h2>
             <p className="text-body text-muted-foreground leading-relaxed">
-              We are studying whether a safe LED light device, used at home once each day, can help preserve renal function and improve quality of life in people with early-stage chronic kidney disease (CKD).
+              We are studying whether a safe LED light device, used at home once each day, can help preserve renal function and improve quality of life in people with early-stage chronic kidney disease (CKD). Participants will continue their prescribed medications, normal exercise routine, and current diet.
             </p>
           </div>
 
@@ -218,7 +218,7 @@ const Index = () => {
             </h2>
             <p className="text-body text-muted-foreground">
               This study is for adults with confirmed early-stage chronic kidney disease.
-              Participants must be open to the idea that a simple LED light device may help their body maintain renal function and improve the quality of their life.
+              Participants must be open to the idea that a simple LED light device may help their body maintain renal function and improve quality of life.
             </p>
           </div>
 
@@ -285,7 +285,8 @@ const Index = () => {
               <img
                 src={sandyPhoto}
                 alt="Sandra Brass, PhD Candidate"
-                className="w-40 h-40 rounded-full object-cover object-top mx-auto mb-4 border-4 border-primary/20 shadow-soft"
+                className="w-48 h-48 rounded-full object-cover object-center mx-auto mb-4 border-4 border-primary/20 shadow-soft"
+                style={{ objectPosition: "center 20%" }}
               />
               <h3 className="text-heading-sm font-serif font-bold text-foreground mb-2">
                 Sandra Brass, PhD Candidate
