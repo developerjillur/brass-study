@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Merriweather:wght@700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  PBM Study Portal — Senior-Friendly Design System
+  All colors HSL. Optimized for accessibility, high contrast, large touch targets.
+*/
+
+@layer base {
+  :root {
+    /* Core palette — soft spa green + warm earth tones */
+    --background: 140 20% 97%;
+    --foreground: 150 20% 15%;
+
+    --card: 140 15% 99%;
+    --card-foreground: 150 20% 15%;
+
+    --popover: 140 15% 99%;
+    --popover-foreground: 150 20% 15%;
+
+    /* Primary: Soft sage green — spa calm */
+    --primary: 152 35% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Warm linen */
+    --secondary: 140 15% 92%;
+    --secondary-foreground: 150 20% 15%;
+
+    /* Muted surfaces */
+    --muted: 140 12% 93%;
+    --muted-foreground: 150 10% 42%;
+
+    /* Accent: Warm terracotta — gentle warmth */
+    --accent: 18 55% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 140 12% 85%;
+    --input: 140 12% 85%;
+    --ring: 152 35% 42%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --success: 152 45% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 40 80% 50%;
+    --warning-foreground: 30 50% 15%;
+    --info: 190 55% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* Senior-friendly spacing */
+    --space-touch: 48px;
+    --space-touch-lg: 64px;
+
+    /* Shadows */
+    --shadow-soft: 0 2px 12px -2px hsl(150 20% 15% / 0.06);
+    --shadow-card: 0 4px 24px -4px hsl(150 20% 15% / 0.08);
+    --shadow-elevated: 0 8px 40px -8px hsl(150 20% 15% / 0.12);
+
+    /* Sidebar */
+    --sidebar-background: 140 15% 97%;
+    --sidebar-foreground: 150 15% 26%;
+    --sidebar-primary: 152 35% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 140 12% 93%;
+    --sidebar-accent-foreground: 150 20% 15%;
+    --sidebar-border: 140 12% 85%;
+    --sidebar-ring: 152 35% 42%;
+  }
+
+  /* High contrast mode */
+  .high-contrast {
+    --foreground: 150 30% 5%;
+    --muted-foreground: 150 15% 25%;
+    --border: 150 15% 60%;
+    --primary: 152 50% 28%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Open Sans', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', Georgia, serif;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Selection colors */
+  ::selection {
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Senior-friendly form labels */
+  .form-label {
+    @apply block text-base font-semibold text-foreground mb-2;
+  }
+
+  .form-description {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+
+  /* Progress bar */
+  .progress-track {
+    @apply w-full h-3 rounded-full bg-secondary;
+  }
+
+  .progress-fill {
+    @apply h-3 rounded-full bg-primary transition-all duration-500;
+  }
+
+  /* Polished card hover with lift effect */
+  .card-interactive {
+    @apply bg-card rounded-xl p-6 shadow-card border border-border transition-all duration-200;
+  }
+
+  .card-interactive:not([aria-disabled="true"]):hover {
+    @apply shadow-elevated;
+    transform: translateY(-2px);
+  }
+
+  .card-interactive:not([aria-disabled="true"]):active {
+    transform: translateY(0);
+  }
+
+  /* Subtle page entrance animation */
+  .page-enter {
+    animation: page-fade-in 0.35s ease-out forwards;
+  }
+
+  /* Header accent stripe */
+  .header-accent {
+    @apply h-1 w-full;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(140 30% 60%), hsl(var(--primary)));
+  }
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Print-optimized layout for dissertation reports */
+@media print {
+  body {
+    font-size: 11pt;
+    color: black;
+    background: white;
+  }
+
+  .print\:hidden,
+  header, footer, nav,
+  [role="navigation"],
+  button:not(.print-visible) {
+    display: none !important;
+  }
+
+  .print\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .print\:mb-4 {
+    margin-bottom: 1rem;
+  }
+
+  /* Show all tab content when printing */
+  [role="tabpanel"] {
+    display: block !important;
+    opacity: 1 !important;
+    position: static !important;
+  }
+
+  [role="tabpanel"][hidden] {
+    display: block !important;
+  }
+
+  .shadow-card, .shadow-elevated {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+
+  /* Force charts to be visible */
+  .recharts-responsive-container {
+    min-height: 250px !important;
+  }
+
+  /* Page breaks */
+  .group-comparison-charts > div,
+  .descriptive-statistics > div,
+  .compliance-trend-chart {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Clean table styling */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+  }
+}

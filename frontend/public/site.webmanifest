@@ -1,0 +1,16 @@
+{
+  "name": "BRASS CKD Study",
+  "short_name": "PBM Study",
+  "description": "Photobiomodulation Research Study for Chronic Kidney Disease",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
