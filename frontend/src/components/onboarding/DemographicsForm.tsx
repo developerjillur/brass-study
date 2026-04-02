@@ -16,6 +16,7 @@ interface DemographicsFormProps {
 }
 
 export interface DemographicsData {
+  date_of_birth: string;
   age: number | null;
   sex: string;
   ethnicity: string;
@@ -44,6 +45,7 @@ const COMORBIDITY_OPTIONS = [
 const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) => {
   const [section, setSection] = useState<1 | 2 | 3 | 4>(1);
   const [form, setForm] = useState<DemographicsData>({
+    date_of_birth: "",
     age: null,
     sex: "",
     ethnicity: "",
@@ -79,7 +81,7 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
     });
   };
 
-  const canAdvance1 = form.age && form.age > 0 && form.sex && form.ethnicity;
+  const canAdvance1 = form.date_of_birth && form.age && form.age > 0 && form.sex && form.ethnicity;
   const canAdvance2 = form.comorbidities.length > 0;
   const canAdvance3 = form.emergency_contact_name && form.emergency_contact_phone;
   const canSubmit = form.signature_text.length >= 3 && signatureConfirm;
@@ -114,6 +116,30 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
         {/* Section 1: Demographics */}
         {section === 1 && (
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="dob">Date of Birth *</Label>
+              <Input
+                id="dob"
+                type="date"
+                max={new Date().toISOString().split("T")[0]}
+                value={form.date_of_birth}
+                onChange={(e) => {
+                  update("date_of_birth", e.target.value);
+                  if (e.target.value) {
+                    const birthDate = new Date(e.target.value);
+                    const today = new Date();
+                    let calcAge = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) calcAge--;
+                    update("age", calcAge);
+                  }
+                }}
+                className="max-w-[250px]"
+              />
+              {form.date_of_birth && form.age && (
+                <p className="text-sm text-muted-foreground">Age: {form.age} years old</p>
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="age">Age *</Label>
@@ -122,9 +148,10 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
                   type="number"
                   min={18}
                   max={120}
-                  placeholder="e.g. 58"
+                  placeholder="Auto-calculated from DOB"
                   value={form.age ?? ""}
                   onChange={(e) => update("age", e.target.value ? parseInt(e.target.value) : null)}
+                  readOnly={!!form.date_of_birth}
                 />
               </div>
               <div className="space-y-2">

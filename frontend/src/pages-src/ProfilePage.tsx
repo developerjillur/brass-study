@@ -18,7 +18,7 @@ const profileSchema = z.object({
   full_name: z.string().trim().min(1, "Name is required").max(100, "Name must be under 100 characters"),
   phone: z.string().trim().max(20, "Phone must be under 20 characters").optional().or(z.literal("")),
   address: z.string().trim().max(300, "Address must be under 300 characters").optional().or(z.literal("")),
-  date_of_birth: z.string().optional().or(z.literal("")),
+  date_of_birth: z.string().min(1, "Date of birth is required"),
 });
 
 const ProfilePage = () => {
@@ -191,7 +191,7 @@ const ProfilePage = () => {
 
               {/* Date of Birth */}
               <div className="space-y-2">
-                <Label htmlFor="dob" className="text-base font-semibold">Date of Birth</Label>
+                <Label htmlFor="dob" className="text-base font-semibold">Date of Birth <span className="text-destructive">*</span></Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -202,6 +202,7 @@ const ProfilePage = () => {
                     className="pl-10"
                   />
                 </div>
+                {errors.date_of_birth && <p className="text-sm text-destructive">{errors.date_of_birth}</p>}
               </div>
 
               {/* Phone */}
