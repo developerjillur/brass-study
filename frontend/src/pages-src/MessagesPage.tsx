@@ -58,11 +58,13 @@ const MessagesPage = () => {
     if (!user) return;
 
     // Load Calendly URL from study_settings
-    const setting = await apiClient.get("/api/study-settings").catch(() => []);
-    if (setting) setCalendlyUrl(setting.setting_value);
+    try {
+      const setting = await apiClient.get("/api/study-settings/calendly_url");
+      if (setting && setting.setting_value) setCalendlyUrl(setting.setting_value);
+    } catch {}
 
     if (userRole === "researcher") {
-      const participants = await apiClient.get("/api/participants/me").catch(() => []);
+      const participants = await apiClient.get("/api/participants").catch(() => []);
 
       if (participants) {
         const userIds = participants.map((p) => p.user_id);

@@ -75,10 +75,7 @@ const LabResultForm = ({ participantId, userId, onSubmitted }: LabResultFormProp
     try {
       const profile = await apiClient.get("/api/users/me/profile").catch(() => []);
 
-      const result = await apiClient.post("/api/renal-panels", {
-        participant_user_id: userId,
-        screening_id: null,
-        full_name: profile?.full_name || "Participant",
+      const result = await apiClient.post("/api/renal-panels/follow-up", {
         ckd_stage: form.ckd_stage,
         egfr: form.egfr ? parseFloat(form.egfr) : null,
         creatinine: form.creatinine ? parseFloat(form.creatinine) : null,
@@ -89,7 +86,6 @@ const LabResultForm = ({ participantId, userId, onSubmitted }: LabResultFormProp
         lab_date: form.lab_date || null,
         doctor_name: form.doctor_name.trim() || null,
         notes: form.notes.trim() || null,
-        submission_type: "follow_up",
       });
 
 

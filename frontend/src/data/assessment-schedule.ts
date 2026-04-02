@@ -9,15 +9,15 @@ export interface ScheduledAssessment {
 
 /**
  * Assessment schedule for the 12-week PBM study.
- * Baseline (day 0) is handled during study setup.
- * Follow-up questionnaires are completed only at study completion (week 12).
+ * Questionnaires are completed prior to the study (baseline) and at completion (day 90).
  */
 export const ASSESSMENT_SCHEDULE: ScheduledAssessment[] = [
+  { studyDay: 0, timePoint: "baseline", label: "Baseline (Prior to Study)", assessments: [HADS, PHQ9, GAD7, PSS10] },
   { studyDay: 84, timePoint: "week_12", label: "Week 12 (Completion)", assessments: [HADS, PHQ9, GAD7, PSS10] },
 ];
 
 /** Window in days: participants can complete assessments ±5 days from scheduled day */
-export const ASSESSMENT_WINDOW_DAYS = 5;
+export const ASSESSMENT_WINDOW_DAYS = 90;
 
 /**
  * Given a study day, return assessments that are currently due (within window)
@@ -29,7 +29,7 @@ export function getDueAssessments(
 ): ScheduledAssessment[] {
   return ASSESSMENT_SCHEDULE.filter((scheduled) => {
     const isInWindow =
-      studyDay >= scheduled.studyDay - ASSESSMENT_WINDOW_DAYS &&
+      studyDay >= scheduled.studyDay - 5 &&
       studyDay <= scheduled.studyDay + ASSESSMENT_WINDOW_DAYS;
     const isCompleted = completedTimePoints.includes(scheduled.timePoint);
     return isInWindow && !isCompleted;
@@ -46,7 +46,7 @@ export function getNextUpcoming(
   return (
     ASSESSMENT_SCHEDULE.find((s) => {
       return (
-        s.studyDay - ASSESSMENT_WINDOW_DAYS > studyDay &&
+        s.studyDay - 5 > studyDay &&
         !completedTimePoints.includes(s.timePoint)
       );
     }) ?? null

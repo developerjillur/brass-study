@@ -19,7 +19,7 @@ interface SessionLogFormProps {
   onSessionLogged: () => void;
 }
 
-const APPLICATION_POINTS = ["Navel", "Wrist"];
+const APPLICATION_POINTS = ["Navel", "Left Wrist"];
 
 const SessionLogForm = ({ participant, userId, todayLogged, onSessionLogged }: SessionLogFormProps) => {
   const { toast } = useToast();
@@ -80,7 +80,7 @@ const SessionLogForm = ({ participant, userId, todayLogged, onSessionLogged }: S
 
 
       // Update compliance rate on participant
-      const sessions = await apiClient.get("/api/therapy-sessions").catch(() => []);
+      const sessions = await apiClient.get("/api/therapy-sessions/mine").catch(() => []);
 
       if (sessions) {
         const totalDays = sessions.length;

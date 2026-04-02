@@ -59,9 +59,10 @@ const DailyLogPage = () => {
 
     // Check if today already logged
     const today = new Date().toISOString().split("T")[0];
-    const existing = await apiClient.get("/api/therapy-sessions/mine").catch(() => []);
+    const sessions = await apiClient.get("/api/therapy-sessions/mine").catch(() => []);
+    const todaySessions = Array.isArray(sessions) ? sessions.filter((s: any) => s.session_date?.split("T")[0] === today) : [];
 
-    setTodayLogged(!!existing);
+    setTodayLogged(todaySessions.length > 0);
     setIsLoading(false);
   };
 
