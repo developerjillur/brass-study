@@ -527,10 +527,10 @@ const ResearcherParticipantsPage = () => {
                         <TableCell>{p.study_day ?? "—"}</TableCell>
                         <TableCell>
                           {p.group_assignment
-                            ? studyUnblinded
-                              ? <Badge variant={p.group_assignment === "S" ? "default" : "secondary"}>{p.group_assignment === "S" ? "Group S (Active)" : "Group C (Placebo)"}</Badge>
-                              : <Badge variant="outline">Assigned ✓</Badge>
-                            : "—"
+                            ? <Badge variant={p.group_assignment === "S" ? "default" : "secondary"}>
+                                {p.group_assignment === "S" ? "S – Stepped" : "C – Control"}
+                              </Badge>
+                            : <span className="text-muted-foreground text-xs">Not assigned</span>
                           }
                         </TableCell>
                         <TableCell>
@@ -771,9 +771,26 @@ const ResearcherParticipantsPage = () => {
                                         </div>
                                         <div>
                                           <span className="text-muted-foreground">Group:</span>{" "}
-                                          <span className="font-medium capitalize">
-                                            {selectedParticipant?.group_assignment || "Unassigned"}
-                                          </span>
+                                          <select
+                                            value={selectedParticipant?.group_assignment || ""}
+                                            onChange={async (e) => {
+                                              const val = e.target.value;
+                                              if (!val || !selectedParticipant) return;
+                                              try {
+                                                await apiClient.post(`/api/blinding/assign/${selectedParticipant.id}`, { groupCode: val });
+                                                toast({ title: "Group assigned", description: `Participant assigned to ${val === "S" ? "Stepped (20→25→30 min)" : "Control (Constant 20 min)"}` });
+                                                setSelectedParticipant({ ...selectedParticipant, group_assignment: val });
+                                                setParticipants((prev) => prev.map((p) => p.id === selectedParticipant.id ? { ...p, group_assignment: val } : p));
+                                              } catch (err: any) {
+                                                toast({ title: "Error assigning group", description: err.message, variant: "destructive" });
+                                              }
+                                            }}
+                                            className="ml-1 inline-block rounded border border-input bg-background px-2 py-1 text-sm font-medium"
+                                          >
+                                            <option value="">— Select Group —</option>
+                                            <option value="C">Group C – Control (20 min constant)</option>
+                                            <option value="S">Group S – Stepped (20→25→30 min)</option>
+                                          </select>
                                         </div>
                                         <div>
                                           <span className="text-muted-foreground">Study Day:</span>{" "}

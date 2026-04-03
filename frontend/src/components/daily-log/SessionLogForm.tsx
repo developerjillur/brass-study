@@ -17,12 +17,13 @@ interface SessionLogFormProps {
   userId: string;
   todayLogged: boolean;
   loggedDates?: string[];
+  prescribedMinutes?: number | null;
   onSessionLogged: () => void;
 }
 
 const APPLICATION_POINTS = ["Navel", "Left Wrist"];
 
-const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], onSessionLogged }: SessionLogFormProps) => {
+const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], prescribedMinutes, onSessionLogged }: SessionLogFormProps) => {
   const { toast } = useToast();
   const today = new Date().toISOString().split("T")[0];
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -281,7 +282,11 @@ const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], on
                 placeholder="e.g., 20"
                 className="text-lg font-semibold max-w-[200px]"
               />
-              <p className="text-sm text-muted-foreground">Typical sessions are 20–30 minutes.</p>
+              <p className="text-sm text-muted-foreground">
+                {prescribedMinutes
+                  ? `Your prescribed session for today is ${prescribedMinutes} minutes.`
+                  : "Typical sessions are 20–30 minutes."}
+              </p>
             </div>
 
             {/* Application Point */}

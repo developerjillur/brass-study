@@ -26,6 +26,7 @@ const DailyLogPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todayLogged, setTodayLogged] = useState(false);
   const [loggedDates, setLoggedDates] = useState<string[]>([]);
+  const [prescribedMinutes, setPrescribedMinutes] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -57,6 +58,12 @@ const DailyLogPage = () => {
     }
 
     setParticipant({ id: data.id, study_start_date: data.study_start_date!, study_day: data.study_day ?? 0 });
+
+    // Load prescribed duration
+    try {
+      const rx = await apiClient.get(`/api/blinding/prescribed-duration/${data.id}?studyDay=${data.study_day ?? 1}`);
+      if (rx && rx.prescribed_minutes) setPrescribedMinutes(rx.prescribed_minutes);
+    } catch { /* no group assigned yet */ }
 
     // Load all logged dates
     const today = new Date().toISOString().split("T")[0];
@@ -100,7 +107,7 @@ const DailyLogPage = () => {
               Daily Therapy Log
             </h1>
             <p className="text-muted-foreground">
-              Study Day {participant.study_day ?? 0} • Track your daily PBM therapy sessions (typical sessions are 20–30 minutes)
+              Study Day {participant.study_day ?? 0} • {prescribedMinutes ? `Today's prescribed session: ${prescribedMinutes} minutes` : "Track your daily PBM therapy sessions (typical sessions are 20–30 minutes)"}
             </p>
           </div>
 
@@ -126,6 +133,7 @@ const DailyLogPage = () => {
                 userId={user!.id}
                 todayLogged={todayLogged}
                 loggedDates={loggedDates}
+                prescribedMinutes={prescribedMinutes}
                 onSessionLogged={handleSessionLogged}
               />
             </TabsContent>

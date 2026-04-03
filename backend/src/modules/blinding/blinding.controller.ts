@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { BlindingService } from './blinding.service';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -16,7 +16,13 @@ export class BlindingController {
 
   @Post('assign/:participantId')
   @Roles('researcher')
-  assign(@Param('participantId') participantId: string) {
+  assign(
+    @Param('participantId') participantId: string,
+    @Body() body?: { groupCode?: string },
+  ) {
+    if (body?.groupCode) {
+      return this.blindingService.manualAssign(participantId, body.groupCode);
+    }
     return this.blindingService.assign(participantId);
   }
 
@@ -27,7 +33,13 @@ export class BlindingController {
   }
 
   @Get('prescribed-duration/:participantId')
-  getPrescribedDuration(@Param('participantId') participantId: string) {
-    return this.blindingService.getPrescribedDuration(participantId);
+  getPrescribedDuration(
+    @Param('participantId') participantId: string,
+    @Query('studyDay') studyDay?: string,
+  ) {
+    return this.blindingService.getPrescribedDuration(
+      participantId,
+      studyDay ? parseInt(studyDay) : undefined,
+    );
   }
 }
