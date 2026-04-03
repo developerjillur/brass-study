@@ -74,6 +74,7 @@ const AssessmentsPage = () => {
   const handleStartAssessment = (scheduled: ScheduledAssessment) => {
     setActiveSchedule(scheduled);
     setActiveQIdx(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleAssessmentComplete = async (
@@ -103,6 +104,7 @@ const AssessmentsPage = () => {
       if (activeQIdx < activeSchedule.assessments.length - 1) {
         setActiveQIdx((prev) => prev + 1);
         toast({ title: `${questionnaire.title} completed!` });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         // All done for this time point
         setCompletedTimePoints((prev) => [...prev, activeSchedule.timePoint]);
@@ -148,6 +150,7 @@ const AssessmentsPage = () => {
               </span>
             </div>
             <AssessmentForm
+              key={`${activeSchedule.timePoint}_${currentQ.id}`}
               questionnaire={currentQ}
               onComplete={(responses, totalScore, subscaleScores) =>
                 handleAssessmentComplete(currentQ, responses, totalScore, subscaleScores)

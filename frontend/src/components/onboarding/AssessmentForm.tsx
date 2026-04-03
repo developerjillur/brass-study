@@ -67,13 +67,29 @@ const AssessmentForm = ({ questionnaire, onComplete, isSubmitting }: AssessmentF
   const loadSaved = (): Record<string, number> => {
     try {
       const saved = localStorage.getItem(`${AUTOSAVE_KEY}_${questionnaire.id}`);
-      return saved ? JSON.parse(saved) : {};
+      if (!saved) return {};
+      const parsed = JSON.parse(saved);
+      // Only restore if the saved keys belong to this questionnaire
+      const validIds = new Set(questionnaire.questions.map(q => q.id));
+      const filtered: Record<string, number> = {};
+      for (const [k, v] of Object.entries(parsed)) {
+        if (validIds.has(k)) filtered[k] = v as number;
+      }
+      return filtered;
     } catch { return {}; }
   };
 
   const [responses, setResponses] = useState<Record<string, number>>(loadSaved);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Reset state when questionnaire changes (e.g. HADS -> PHQ-9)
+  useEffect(() => {
+    setCurrentPage(0);
+    setResponses(loadSaved());
+    setLastSaved(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [questionnaire.id]);
 
   const totalQuestions = questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
@@ -186,11 +202,11 @@ const AssessmentForm = ({ questionnaire, onComplete, isSubmitting }: AssessmentF
         </TooltipProvider>
 
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
-          <Button variant="outline" onClick={() => setCurrentPage((p) => p - 1)} disabled={currentPage === 0}>
+          <Button variant="outline" onClick={() => { setCurrentPage((p) => p - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={currentPage === 0}>
             <ChevronLeft className="w-4 h-4 mr-1" /> Previous
           </Button>
           {currentPage < totalPages - 1 ? (
-            <Button onClick={() => setCurrentPage((p) => p + 1)} disabled={!allPageAnswered}>
+            <Button onClick={() => { setCurrentPage((p) => p + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={!allPageAnswered}>
               Next <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
