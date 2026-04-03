@@ -25,6 +25,7 @@ const DailyLogPage = () => {
   const [participant, setParticipant] = useState<ParticipantInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [todayLogged, setTodayLogged] = useState(false);
+  const [loggedDates, setLoggedDates] = useState<string[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -57,18 +58,22 @@ const DailyLogPage = () => {
 
     setParticipant({ id: data.id, study_start_date: data.study_start_date!, study_day: data.study_day ?? 0 });
 
-    // Check if today already logged
+    // Load all logged dates
     const today = new Date().toISOString().split("T")[0];
     const sessions = await apiClient.get("/api/therapy-sessions/mine").catch(() => []);
-    const todaySessions = Array.isArray(sessions) ? sessions.filter((s: any) => s.session_date?.split("T")[0] === today) : [];
-
-    setTodayLogged(todaySessions.length > 0);
+    const dates = Array.isArray(sessions) ? sessions.map((s: any) => s.session_date?.split("T")[0]).filter(Boolean) : [];
+    setLoggedDates(dates);
+    setTodayLogged(dates.includes(today));
     setIsLoading(false);
   };
 
-  const handleSessionLogged = () => {
-    setTodayLogged(true);
-    toast({ title: "Session logged!", description: "Your therapy session has been recorded." });
+  const handleSessionLogged = async () => {
+    // Reload logged dates
+    const sessions = await apiClient.get("/api/therapy-sessions/mine").catch(() => []);
+    const dates = Array.isArray(sessions) ? sessions.map((s: any) => s.session_date?.split("T")[0]).filter(Boolean) : [];
+    setLoggedDates(dates);
+    const today = new Date().toISOString().split("T")[0];
+    setTodayLogged(dates.includes(today));
   };
 
   if (loading || isLoading) {
@@ -120,6 +125,7 @@ const DailyLogPage = () => {
                 participant={participant}
                 userId={user!.id}
                 todayLogged={todayLogged}
+                loggedDates={loggedDates}
                 onSessionLogged={handleSessionLogged}
               />
             </TabsContent>
