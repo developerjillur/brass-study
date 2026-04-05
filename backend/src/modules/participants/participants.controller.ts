@@ -37,6 +37,7 @@ export class ParticipantsController {
       status?: string;
       researcher_notes?: string;
       study_start_date?: string;
+      compliance_rate?: number;
     },
   ) {
     return this.participantsService.update(id, {
@@ -45,6 +46,7 @@ export class ParticipantsController {
       status: body.status,
       researcherNotes: body.researcher_notes,
       studyStartDate: body.study_start_date ? new Date(body.study_start_date) : undefined,
+      complianceRate: body.compliance_rate,
     });
   }
 
@@ -53,5 +55,15 @@ export class ParticipantsController {
   @Roles('researcher')
   withdraw(@Param('id') id: string) {
     return this.participantsService.withdraw(id);
+  }
+
+  @Post(':id/withdraw-anonymize')
+  @UseGuards(RolesGuard)
+  @Roles('researcher')
+  withdrawAndAnonymize(
+    @Param('id') id: string,
+    @CurrentUser('sub') researcherUserId: string,
+  ) {
+    return this.participantsService.withdrawAndAnonymize(id, researcherUserId);
   }
 }

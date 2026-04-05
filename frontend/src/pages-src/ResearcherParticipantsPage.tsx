@@ -212,9 +212,7 @@ const ResearcherParticipantsPage = () => {
     if (!confirmed) return;
 
     try {
-      const { error } = await apiClient.post("/api/anonymize_withdrawn_participant", {
-        p_participant_id: participantId,
-      });
+      await apiClient.post(`/api/participants/${participantId}/withdraw-anonymize`);
       toast({ title: "Participant Withdrawn", description: "All PHI has been anonymized per HIPAA requirements." });
       fetchParticipants();
       setSelectedParticipant(null);
