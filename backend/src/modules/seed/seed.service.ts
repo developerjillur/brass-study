@@ -67,7 +67,7 @@ export class SeedService {
       await this.settingRepo.save(
         this.settingRepo.create({
           settingKey: 'calendly_url',
-          settingValue: 'https://calendly.com/sandybrass-quantumuniversity',
+          settingValue: 'https://calendly.com/d/cxyv-5mc-kq4/brass-study-check-in',
         }),
       );
     }
