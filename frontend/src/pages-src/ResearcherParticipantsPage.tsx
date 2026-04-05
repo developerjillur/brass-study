@@ -406,9 +406,10 @@ const ResearcherParticipantsPage = () => {
                 size="sm"
                 onClick={exportAllData}
                 disabled={exporting || participants.length === 0}
+                title="Download all therapy sessions, assessments, and lab results as CSV files"
               >
                 <Download className="w-4 h-4 mr-1" />
-                {exporting ? "Exporting..." : "Export CSV"}
+                {exporting ? "Exporting..." : "Export Data (CSV)"}
               </Button>
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-muted-foreground" />
@@ -425,27 +426,6 @@ const ResearcherParticipantsPage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              {!studyUnblinded && (
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleUnblind}
-                >
-                  🔓 Reveal Study Groups
-                </Button>
-              )}
-              {studyUnblinded && (
-                <div className="flex items-center gap-2">
-                  <Badge variant="destructive" className="text-sm px-3 py-1">Study Unblinded</Badge>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleNotifyPlaceboGroup}
-                  >
-                    📧 Notify Placebo Group
-                  </Button>
-                </div>
-              )}
             </div>
           </div>
 
