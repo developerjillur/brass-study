@@ -559,6 +559,55 @@ const ResearcherParticipantsPage = () => {
                                 </DialogTitle>
                               </DialogHeader>
 
+                              {/* Participant Info Summary — always visible above tabs */}
+                              {selectedParticipant && !detailLoading && (
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 px-1 border rounded-lg bg-muted/30 mb-2">
+                                  <div className="text-center">
+                                    <p className="text-xs text-muted-foreground">Study Day</p>
+                                    <p className="text-lg font-bold">{selectedParticipant.study_day ?? "—"}</p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-xs text-muted-foreground">Compliance</p>
+                                    <p className="text-lg font-bold">
+                                      {selectedParticipant.compliance_rate != null
+                                        ? `${Math.round(Number(selectedParticipant.compliance_rate))}%`
+                                        : "—"}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-xs text-muted-foreground">Enrolled</p>
+                                    <p className="text-sm font-medium">
+                                      {selectedParticipant.enrolled_at
+                                        ? format(new Date(selectedParticipant.enrolled_at), "MMM d, yyyy")
+                                        : "—"}
+                                    </p>
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="text-xs text-muted-foreground mb-1">Study Group</p>
+                                    <select
+                                      value={selectedParticipant.group_assignment || ""}
+                                      onChange={async (e) => {
+                                        const val = e.target.value;
+                                        if (!val || !selectedParticipant) return;
+                                        try {
+                                          await apiClient.post(`/api/blinding/assign/${selectedParticipant.id}`, { groupCode: val });
+                                          toast({ title: "Group assigned", description: `Set to ${val === "S" ? "Stepped (20→25→30 min)" : "Control (20 min constant)"}` });
+                                          setSelectedParticipant({ ...selectedParticipant, group_assignment: val });
+                                          setParticipants((prev) => prev.map((p) => p.id === selectedParticipant.id ? { ...p, group_assignment: val } : p));
+                                        } catch (err: any) {
+                                          toast({ title: "Error", description: err.message, variant: "destructive" });
+                                        }
+                                      }}
+                                      className="w-full rounded border border-input bg-background px-2 py-1 text-sm font-bold text-center"
+                                    >
+                                      <option value="">Select...</option>
+                                      <option value="C">C – Control (20 min)</option>
+                                      <option value="S">S – Stepped (20→25→30)</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              )}
+
                               {detailLoading ? (
                                 <div className="flex justify-center py-8">
                                   <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
