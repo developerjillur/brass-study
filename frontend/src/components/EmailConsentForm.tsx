@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ const emailConsentSchema = z.object({
 type EmailConsentData = z.infer<typeof emailConsentSchema>;
 
 const EmailConsentForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({ fullName: "", email: "", consent: false });
   const [errors, setErrors] = useState<Partial<Record<keyof EmailConsentData, string>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -39,14 +41,21 @@ const EmailConsentForm = () => {
     setIsSubmitting(true);
 
     try {
-      await apiClient.post("/api/screening", {
+      const response = await apiClient.post("/api/screening", {
         full_name: result.data.fullName,
         email: result.data.email,
         consent_to_contact: result.data.consent,
       });
 
+      // Store screening info for the renal panel screener
+      if (typeof window !== "undefined" && response) {
+        localStorage.setItem("screening_id", (response as any).id || "");
+        localStorage.setItem("screening_name", result.data.fullName);
+        localStorage.setItem("screening_email", result.data.email);
+      }
+
       setSubmitted(true);
-      toast.success("Your information has been submitted successfully!");
+      toast.success("Your information has been submitted! Please complete the Renal Panel form next.");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -61,11 +70,19 @@ const EmailConsentForm = () => {
           <CheckCircle className="w-10 h-10 text-success" />
         </div>
         <h3 className="text-heading-sm font-serif font-bold text-foreground mb-3">
-          Thank You!
+          Thank You, {formData.fullName.split(" ")[0]}!
         </h3>
-        <p className="text-body text-muted-foreground max-w-md mx-auto leading-relaxed">
-          We received your information. You will receive an email with a brief health questionnaire within 24–48 hours.
+        <p className="text-body text-muted-foreground max-w-md mx-auto leading-relaxed mb-6">
+          We received your information. Please complete the Renal Function Panel form below so we can determine your eligibility.
         </p>
+        <Button
+          variant="cta"
+          size="xl"
+          onClick={() => router.push("/screener")}
+        >
+          Continue to Renal Panel Form
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </Button>
       </div>
     );
   }

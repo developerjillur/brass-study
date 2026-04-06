@@ -98,9 +98,8 @@ const ScreeningQueuePage = () => {
   const updateSubmissionStatus = async (submissionId: string, newStatus: string) => {
     const submission = submissions.find((s) => s.id === submissionId);
     try {
-      await apiClient.put(`/api/screening/${submissionId}`, {
+      await apiClient.put(`/api/screening/${submissionId}/status`, {
         status: newStatus,
-        updated_at: new Date().toISOString(),
       });
 
       toast({

@@ -204,10 +204,10 @@ const SiteHeader = () => {
           ) : (
             <Link
               href="/login"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
             >
               <LogIn className="w-4 h-4" />
-              <span className="hidden sm:inline">Participant Login</span>
+              <span className="hidden sm:inline">Study Login</span>
             </Link>
           )}
         </nav>

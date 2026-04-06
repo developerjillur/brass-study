@@ -41,10 +41,18 @@ const ScreenerPage = () => {
   const { toast } = useToast();
   const router = useRouter();
 
+  // Check if we came from the interest form (screening already created)
+  const existingScreeningId = typeof window !== "undefined" ? localStorage.getItem("screening_id") || "" : "";
+  const existingName = typeof window !== "undefined" ? localStorage.getItem("screening_name") || "" : "";
+  const existingEmail = typeof window !== "undefined" ? localStorage.getItem("screening_email") || "" : "";
+  const hasExistingScreening = !!existingScreeningId;
+
   const form = useForm<RenalPanelForm>({
     resolver: zodResolver(renalPanelSchema),
     defaultValues: {
-      consentToContact: false,
+      fullName: existingName,
+      email: existingEmail,
+      consentToContact: hasExistingScreening ? true : false,
       ckdStage: undefined,
     },
   });
@@ -53,21 +61,21 @@ const ScreenerPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Generate screening ID client-side to avoid needing SELECT permission
-      const screeningId = crypto.randomUUID();
+      let screeningId = existingScreeningId;
 
-      // Insert new screening submission (anon can't SELECT, so no duplicate check)
-      await apiClient.post("/api/screening", {
-        id: screeningId,
-        full_name: data.fullName,
-        email: data.email,
-        consent_to_contact: data.consentToContact,
-        status: "screener_completed" as const,
-      });
+      // If no existing screening, create one (direct access to screener page)
+      if (!screeningId) {
+        const screeningResult = await apiClient.post("/api/screening", {
+          full_name: data.fullName,
+          email: data.email,
+          consent_to_contact: data.consentToContact,
+        });
+        screeningId = (screeningResult as any)?.id || "";
+      }
 
-      // Insert renal panel data
-      await apiClient.post("/api/renal-panels", {
-        screening_id: screeningId,
+      // Submit renal panel linked to the screening
+      await apiClient.post("/api/renal-panels/screening", {
+        screeningId: screeningId,
         full_name: data.fullName,
         ckd_stage: data.ckdStage,
         egfr: data.egfr || null,
@@ -79,12 +87,23 @@ const ScreenerPage = () => {
         lab_date: data.labDate || null,
         doctor_name: data.doctorName || null,
         notes: data.notes || null,
-        submission_type: "screening",
       });
+
+      // Update screening status to screener_completed
+      if (screeningId) {
+        await apiClient.put(`/api/screening/${screeningId}/status`, {
+          status: "screener_completed",
+        }).catch(() => {}); // non-critical if this fails (may need auth)
+      }
+
+      // Clear localStorage
+      localStorage.removeItem("screening_id");
+      localStorage.removeItem("screening_name");
+      localStorage.removeItem("screening_email");
 
       toast({
         title: "Screener Submitted Successfully",
-        description: "Thank you for your submission. A researcher will review it shortly.",
+        description: "Thank you! A researcher will review your results and contact you about eligibility.",
       });
 
       router.push("/");
