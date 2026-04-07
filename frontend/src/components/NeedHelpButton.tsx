@@ -25,25 +25,17 @@ const NeedHelpButton = () => {
             If you have questions about the study or need assistance, you can message the research team directly.
           </p>
           <div className="space-y-3">
-            <a
-              href="tel:+17608879181"
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/20 transition-colors"
+            <Button
+              variant="default"
+              className="w-full"
+              onClick={() => {
+                router.push("/messages");
+                setOpen(false);
+              }}
             >
-              📞 Call: (760) 887-9181
-            </a>
-            {user && (
-              <Button
-                variant="default"
-                className="w-full"
-                onClick={() => {
-                  router.push("/messages");
-                  setOpen(false);
-                }}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Message Research Team
-              </Button>
-            )}
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Message Research Team
+            </Button>
           </div>
         </div>
       )}
