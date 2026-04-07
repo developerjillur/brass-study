@@ -60,10 +60,6 @@ const Index = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
-              <Button variant="cta" size="xl" onClick={scrollToEligibility}>
-                <Sparkles className="w-5 h-5" />
-                Check If I'm Eligible
-              </Button>
               <Button variant="outline-accent" size="lg" onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}>
                 Learn More
                 <ArrowDown className="w-4 h-4" />
@@ -293,7 +289,7 @@ const Index = () => {
               </h3>
               <p className="text-primary font-medium mb-4">Quantum University</p>
               <p className="text-body text-muted-foreground leading-relaxed">
-                Sandra is completing her doctoral dissertation on photobiomodulation as a noninvasive intervention for chronic kidney disease. This study has been reviewed and approved by the Institutional Review Board (IRB).
+                Sandra Brass is a Board-Certified Holistic Health Practitioner dedicated to supporting whole-person wellness through integrative, noninvasive approaches. She is completing her doctoral dissertation on photobiomodulation as a noninvasive intervention for early-stage chronic kidney disease. This study has been reviewed and approved by the Institutional Review Board (IRB) of Quantum University.
               </p>
             </div>
           </div>

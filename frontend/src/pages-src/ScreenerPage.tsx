@@ -353,6 +353,33 @@ const ScreenerPage = () => {
                   </div>
                 </div>
 
+                {/* Consent */}
+                <div className="space-y-4 border-t border-border pt-6">
+                  <h3 className="text-lg font-semibold text-foreground">Consent to Share Health Information</h3>
+                  <div className="p-4 bg-muted/50 rounded-lg border border-border">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                      By submitting this form, I consent to share my renal function panel results with the BRASS Study research team led by Sandra Brass, PhD Candidate at Quantum University. I understand that:
+                    </p>
+                    <ul className="text-sm text-muted-foreground space-y-2 ml-4 list-disc">
+                      <li>My health information will be used solely to determine my eligibility for this research study.</li>
+                      <li>My data will be kept confidential and handled in compliance with HIPAA regulations.</li>
+                      <li>I may withdraw my information at any time by contacting the researcher.</li>
+                      <li>Submitting this form does not obligate me to participate in the study.</li>
+                    </ul>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="healthConsent"
+                      required
+                      className="mt-1 h-5 w-5 rounded border-input accent-primary cursor-pointer"
+                    />
+                    <Label htmlFor="healthConsent" className="text-sm font-normal text-foreground leading-relaxed cursor-pointer">
+                      I have read and agree to the above consent. I authorize the sharing of my renal function panel results for eligibility screening purposes. <span className="text-destructive">*</span>
+                    </Label>
+                  </div>
+                </div>
+
                 <div className="flex justify-center pt-6">
                   <Button
                     type="submit"
