@@ -888,26 +888,6 @@ const ResearcherParticipantsPage = () => {
                                         </Select>
                                       </div>
 
-                                      {/* Withdraw & Anonymize */}
-                                      {selectedParticipant?.status !== "withdrawn" && (
-                                        <div className="pt-4 border-t border-border">
-                                          <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            onClick={() =>
-                                              handleWithdrawAndAnonymize(
-                                                selectedParticipant!.id,
-                                                selectedParticipant?.profile?.full_name || "this participant"
-                                              )
-                                            }
-                                          >
-                                            🗑️ Withdraw & Anonymize PHI
-                                          </Button>
-                                          <p className="text-xs text-muted-foreground mt-1">
-                                            Permanently anonymizes all identifiable data per HIPAA §164.514
-                                          </p>
-                                        </div>
-                                      )}
                                       <div>
                                         <label className="text-sm font-medium text-foreground mb-1 block">
                                           Researcher Notes
@@ -922,6 +902,23 @@ const ResearcherParticipantsPage = () => {
                                           Save Notes
                                         </Button>
                                       </div>
+
+                                      {/* Withdraw — only if needed, subtle placement */}
+                                      {selectedParticipant?.status !== "withdrawn" && (
+                                        <div className="pt-6 mt-4 border-t border-dashed border-border/50">
+                                          <button
+                                            className="text-xs text-muted-foreground hover:text-destructive transition-colors underline"
+                                            onClick={() =>
+                                              handleWithdrawAndAnonymize(
+                                                selectedParticipant!.id,
+                                                selectedParticipant?.profile?.full_name || "this participant"
+                                              )
+                                            }
+                                          >
+                                            Withdraw participant from study...
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   </TabsContent>
                                 </Tabs>
