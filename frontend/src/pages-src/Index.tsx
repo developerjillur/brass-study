@@ -185,21 +185,58 @@ const Index = () => {
               />
             </div>
 
-            <div className="mt-8 p-4 bg-muted/50 rounded-xl border border-border text-center">
-              <p className="text-sm text-muted-foreground italic">
-                Bio-Well is not a medical instrument; it is not designed for medical diagnostics — it measures the energy and stress of a person. Available in 70+ countries. Visit{" "}
-                <a href="https://www.bio-well.com" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
-                  www.bio-well.com
-                </a>{" "}
-                for more information.
+            <div className="mt-10 text-center">
+              <h3 className="text-lg font-serif font-bold text-foreground mb-2">
+                What Bio-Well Analysis Reveals
+              </h3>
+              <p className="text-sm text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Bio-Well presents an analysis of the energy field, allowing day-to-day observation of transformations and the influence of different treatments, environments, and stimuli.
               </p>
-              <div className="mt-3">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/about-biowell">
-                    Learn More About Bio-Well <ArrowRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </Button>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 mb-8">
+              <div className="bg-card rounded-xl p-5 shadow-soft border border-border flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground mb-1">Organ & System Assessment</h4>
+                  <p className="text-sm text-muted-foreground">Determine which organs and systems may need attention based on energetic signatures captured through the fingertip scan.</p>
+                </div>
               </div>
+              <div className="bg-card rounded-xl p-5 shadow-soft border border-border flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground mb-1">Treatment Response Tracking</h4>
+                  <p className="text-sm text-muted-foreground">Assess how the energy field responds to different influences — therapies, emotions, medications, supplements, and food.</p>
+                </div>
+              </div>
+              <div className="bg-card rounded-xl p-5 shadow-soft border border-border flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground mb-1">Psycho-Emotional State</h4>
+                  <p className="text-sm text-muted-foreground">Provides information on stress levels and anxiety, offering insight into psycho-emotional well-being at the time of measurement.</p>
+                </div>
+              </div>
+              <div className="bg-card rounded-xl p-5 shadow-soft border border-border flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                  <Eye className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground mb-1">Daily Energy Tracking</h4>
+                  <p className="text-sm text-muted-foreground">See day-to-day transformations in the energy field, allowing researchers and individuals to track progress over time.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-muted/50 rounded-xl border border-border text-center">
+              <p className="text-sm text-muted-foreground italic">
+                Bio-Well is not a medical instrument; it is not designed for medical diagnostics — it measures the energy and stress of a person. Available in 70+ countries.
+              </p>
             </div>
           </div>
         </div>

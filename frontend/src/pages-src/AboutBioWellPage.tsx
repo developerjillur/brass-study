@@ -237,23 +237,9 @@ const AboutBioWellPage = () => {
             </div>
 
             <div className="text-center">
-              <p className="text-sm text-muted-foreground italic mb-6">
+              <p className="text-sm text-muted-foreground italic">
                 In case of health concerns, please consult your doctor.
               </p>
-              <Button
-                variant="outline-accent"
-                size="lg"
-                asChild
-              >
-                <a
-                  href="https://www.bio-well.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Visit bio-well.com
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                </a>
-              </Button>
             </div>
           </div>
         </div>
