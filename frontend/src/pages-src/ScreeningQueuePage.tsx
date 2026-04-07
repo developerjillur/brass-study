@@ -129,9 +129,7 @@ const ScreeningQueuePage = () => {
 
     try {
       const data = await apiClient.post("/api/invitations/invite-participant", {
-        screening_id: submission.id,
-        full_name: submission.full_name,
-        email: submission.email,
+        screeningId: submission.id,
       });
 
       setInviteResult({
