@@ -12,8 +12,8 @@ const SiteFooter = () => {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary/20">
-                <Sun className="w-4 h-4 text-primary-foreground" />
+              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary/20 p-1.5">
+                <img src="/flower-of-life.svg" alt="" className="w-full h-full invert" />
               </div>
               <span className="font-bold text-lg tracking-tight">PBM Study Portal</span>
             </div>

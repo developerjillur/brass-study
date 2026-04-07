@@ -106,8 +106,8 @@ const SiteHeader = () => {
       <div className="bg-card/95 backdrop-blur-sm border-b border-border shadow-soft">
         <div className="container flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary shadow-soft">
-              <Sun className="w-5 h-5 text-primary-foreground" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary shadow-soft p-1.5">
+              <img src="/flower-of-life.svg" alt="" className="w-full h-full invert" />
             </div>
             <div className="flex flex-col">
               <span className="text-base font-bold text-foreground leading-tight tracking-tight">PBM Study</span>
