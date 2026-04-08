@@ -109,8 +109,9 @@ const Index = () => {
               <StepItem number={2} title="Share Your Lab Results" description="Enter your most recent kidney lab results (like eGFR and creatinine) so we can confirm eligibility." />
               <StepItem number={3} title="Join the Study" description="Sign a consent form and answer a few health questionnaires. This takes about 15 minutes." />
               <StepItem number={4} title="Daily Light Therapy at Home" description="Use the provided LED device once each day as directed. The treatment is painless and takes 20–30 minutes. Log your session in the portal — it takes less than 2 minutes." />
-              <StepItem number={5} title="Periodic Check-ins" description="The researcher will be reviewing daily logs weekly for compliance. The researcher will check in on days 30, 60, and 90 to answer any questions you may have." />
-              <StepItem number={6} title="Bio-Well Energy Scans" description="A Bio-Well GDV scan will be performed when your light device is delivered and again at the completion of the study to measure changes in your energy field." />
+              <StepItem number={5} title="Randomized Controlled Study" description="This is a randomized controlled study. Participants will be assigned to one of two groups. Neither the participants nor the researcher will know which group receives the active light and which receives the placebo until the study is complete." />
+              <StepItem number={6} title="Periodic Check-ins" description="The researcher will be reviewing daily logs weekly for compliance. The researcher will check in on days 30, 60, and 90 to answer any questions you may have." />
+              <StepItem number={7} title="Bio-Well Energy Scans" description="A Bio-Well GDV scan will be performed when your light device is delivered and again at the completion of the study to measure changes in your energy field." />
             </div>
           </div>
         </div>
