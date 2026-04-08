@@ -93,7 +93,7 @@ const ResearcherReportsPage = () => {
       const renalMapped = (renalPanelsRes as any[]).map((r: any) => ({
         participant_label: pMap[userToParticipant[r.participant_user_id!]] || "Unknown",
         lab_date: r.lab_date || r.created_at?.split("T")[0] || "",
-        egfr: r.egfr, creatinine: r.creatinine, bun: r.bun,
+        egfr: r.egfr, creatinine: r.creatinine, bun: r.bun, calcium: r.calcium, phosphorus: r.phosphorus, albumin: r.albumin,
       }));
       setRenalData(renalMapped);
     }

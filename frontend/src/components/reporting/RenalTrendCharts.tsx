@@ -15,6 +15,9 @@ interface RenalDataPoint {
   egfr: number | null;
   creatinine: number | null;
   bun: number | null;
+  calcium: number | null;
+  phosphorus: number | null;
+  albumin: number | null;
 }
 
 interface RenalTrendChartsProps {
@@ -34,9 +37,12 @@ const RenalTrendCharts = ({ data, participantLabels }: RenalTrendChartsProps) =>
   const egfrRef = useRef<HTMLDivElement>(null);
   const creatinineRef = useRef<HTMLDivElement>(null);
   const bunRef = useRef<HTMLDivElement>(null);
+  const calciumRef = useRef<HTMLDivElement>(null);
+  const phosphorusRef = useRef<HTMLDivElement>(null);
+  const albuminRef = useRef<HTMLDivElement>(null);
 
   // Pivot data: group by lab_date, with one series per participant
-  const pivotData = (metric: "egfr" | "creatinine" | "bun") => {
+  const pivotData = (metric: "egfr" | "creatinine" | "bun" | "calcium" | "phosphorus" | "albumin") => {
     const dateMap = new Map<string, Record<string, number | null>>();
     for (const d of data) {
       if (!dateMap.has(d.lab_date)) {
@@ -54,7 +60,7 @@ const RenalTrendCharts = ({ data, participantLabels }: RenalTrendChartsProps) =>
   const renderChart = (
     title: string,
     description: string,
-    metric: "egfr" | "creatinine" | "bun",
+    metric: "egfr" | "creatinine" | "bun" | "calcium" | "phosphorus" | "albumin",
     unit: string,
     ref: React.RefObject<HTMLDivElement>,
     filename: string
@@ -123,6 +129,21 @@ const RenalTrendCharts = ({ data, participantLabels }: RenalTrendChartsProps) =>
         "BUN Over Time",
         "Blood Urea Nitrogen (mg/dL) per participant",
         "bun", "mg/dL", bunRef, "bun-trend"
+      )}
+      {renderChart(
+        "Calcium Over Time",
+        "Serum Calcium (mg/dL) per participant",
+        "calcium", "mg/dL", calciumRef, "calcium-trend"
+      )}
+      {renderChart(
+        "Phosphorus Over Time",
+        "Serum Phosphorus (mg/dL) per participant",
+        "phosphorus", "mg/dL", phosphorusRef, "phosphorus-trend"
+      )}
+      {renderChart(
+        "Albumin Over Time",
+        "Serum Albumin (g/dL) per participant",
+        "albumin", "g/dL", albuminRef, "albumin-trend"
       )}
     </div>
   );

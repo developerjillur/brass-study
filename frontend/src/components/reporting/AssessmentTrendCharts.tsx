@@ -81,8 +81,6 @@ const AssessmentTrendCharts = ({ data, participantLabels }: AssessmentTrendChart
         const chartData = pivotData(config.type);
         const ref = chartRefs[config.type as keyof typeof chartRefs];
 
-        if (chartData.length === 0) return null;
-
         return (
           <Card key={config.type} className="shadow-card">
             <CardHeader>
@@ -102,6 +100,9 @@ const AssessmentTrendCharts = ({ data, participantLabels }: AssessmentTrendChart
               </div>
             </CardHeader>
             <CardContent>
+              {chartData.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-8">No data yet — chart will appear when participants complete this questionnaire.</p>
+              ) : (
               <div ref={ref}>
                 <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -124,6 +125,7 @@ const AssessmentTrendCharts = ({ data, participantLabels }: AssessmentTrendChart
                   </LineChart>
                 </ResponsiveContainer>
               </div>
+              )}
             </CardContent>
           </Card>
         );
