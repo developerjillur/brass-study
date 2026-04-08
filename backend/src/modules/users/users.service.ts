@@ -40,8 +40,8 @@ export class UsersService {
     return this.profileRepo.find({ order: { createdAt: 'DESC' } });
   }
 
-  async getResearcherId(): Promise<string | null> {
+  async getResearcherId(): Promise<{ researcher_id: string | null }> {
     const role = await this.roleRepo.findOne({ where: { role: 'researcher' } });
-    return role ? role.userId : null;
+    return { researcher_id: role ? role.userId : null };
   }
 }

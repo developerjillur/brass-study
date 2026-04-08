@@ -96,8 +96,8 @@ const MessagesPage = () => {
     }
 
     setParticipantId(participant.id);
-    const researcherId = await apiClient.get("/api/users/researcher-id").catch(() => null);
-    if (researcherId) setResearcherUserId(researcherId as string);
+    const res = await apiClient.get("/api/users/researcher-id").catch(() => null);
+    if (res?.researcher_id) setResearcherUserId(res.researcher_id);
 
     await loadMessages(participant.id);
     setIsLoading(false);
@@ -274,52 +274,51 @@ const MessagesPage = () => {
           <Card className="shadow-card">
             <CardContent className="p-0">
               {messages.length === 0 ? (
-                <div className="py-16 text-center">
-                  <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <div className="py-10 text-center">
+                  <MessageSquare className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
                   <h3 className="text-lg font-bold text-foreground mb-1">No Messages Yet</h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {userRole === "researcher"
                       ? "Start a conversation with this participant."
-                      : "Messages from your research team will appear here."}
+                      : "Send a message to the research team below."}
                   </p>
                 </div>
               ) : (
-                <>
-                  <ScrollArea className="h-[400px] p-4" ref={scrollRef}>
-                    <div className="space-y-4">
-                      {messages.map((msg) => {
-                        const isMine = msg.sender_id === user?.id;
-                        return (
-                          <MessageBubble
-                            key={msg.id}
-                            body={msg.body}
-                            subject={msg.subject}
-                            isMine={isMine}
-                            createdAt={msg.created_at}
-                            senderLabel={isMine ? "You" : userRole === "researcher" ? "Participant" : "Researcher"}
-                          />
-                        );
-                      })}
-                    </div>
-                  </ScrollArea>
+                <ScrollArea className="h-[400px] p-4" ref={scrollRef}>
+                  <div className="space-y-4">
+                    {messages.map((msg) => {
+                      const isMine = msg.sender_id === user?.id;
+                      return (
+                        <MessageBubble
+                          key={msg.id}
+                          body={msg.body}
+                          subject={msg.subject}
+                          isMine={isMine}
+                          createdAt={msg.created_at}
+                          senderLabel={isMine ? "You" : userRole === "researcher" ? "Participant" : "Researcher"}
+                        />
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              )}
 
-                  {((userRole === "participant" && researcherUserId && messages.length > 0) ||
-                    userRole === "researcher") && (
-                    <div className="p-3 border-t border-border flex gap-2">
-                      <Textarea
-                        placeholder={userRole === "researcher" ? "Send a message..." : "Reply to researcher..."}
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        maxLength={5000}
-                        className="min-h-[44px] max-h-[100px] resize-none"
-                        rows={1}
-                      />
-                      <Button onClick={handleSend} disabled={isSending || !body.trim()} size="icon" className="flex-shrink-0 min-h-[44px] min-w-[44px]">
-                        <Send className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  )}
-                </>
+              {/* Message compose area — always visible when researcher is assigned */}
+              {((userRole === "participant" && researcherUserId) ||
+                userRole === "researcher") && (
+                <div className="p-3 border-t border-border flex gap-2">
+                  <Textarea
+                    placeholder={userRole === "researcher" ? "Send a message..." : "Send a message to the research team..."}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    maxLength={5000}
+                    className="min-h-[44px] max-h-[100px] resize-none"
+                    rows={1}
+                  />
+                  <Button onClick={handleSend} disabled={isSending || !body.trim()} size="icon" className="flex-shrink-0 min-h-[44px] min-w-[44px]">
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -327,12 +326,6 @@ const MessagesPage = () => {
           {userRole === "participant" && !researcherUserId && (
             <p className="text-sm text-muted-foreground text-center">
               No researcher is currently assigned. Messages will be delivered when one is available.
-            </p>
-          )}
-
-          {userRole === "participant" && messages.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center">
-              You'll be able to reply once the researcher sends you a message.
             </p>
           )}
 
