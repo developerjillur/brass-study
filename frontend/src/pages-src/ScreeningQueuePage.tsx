@@ -60,11 +60,14 @@ const ScreeningQueuePage = () => {
 
       setSubmissions(submissionsData || []);
 
+      // Load all renal panels and match to screening submissions by screening_id
+      const allPanels = await apiClient.get("/api/renal-panels").catch(() => []);
       const renalDataMap: Record<string, RenalPanelData | null> = {};
       for (const submission of submissionsData || []) {
-        const renalPanel = await apiClient.get("/api/renal-panels").catch(() => []);
-
-        renalDataMap[submission.id] = renalPanel;
+        const match = Array.isArray(allPanels)
+          ? allPanels.find((p: any) => p.screening_id === submission.id)
+          : null;
+        renalDataMap[submission.id] = match || null;
       }
       setRenalData(renalDataMap);
     } catch (error: any) {
