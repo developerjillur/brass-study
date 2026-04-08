@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { CheckCircle2, AlertTriangle, Sun, CalendarDays, Info } from "lucide-react";
 import type { ParticipantInfo } from "@/pages-src/DailyLogPage";
 
@@ -240,15 +239,29 @@ const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], pr
           </div>
         )}
 
-        {/* Skip toggle */}
-        <div className="flex items-center justify-between p-4 rounded-lg border border-border bg-muted/30">
-          <div>
-            <Label className="text-base font-semibold">Did you skip {showPastDateForm ? "this" : "today's"} session?</Label>
-            <p className="text-sm text-muted-foreground mt-1">
-              It's okay — just let us know why.
-            </p>
+        {/* Skip question */}
+        <div className="p-4 rounded-lg border border-border bg-muted/30">
+          <Label className="text-base font-semibold block mb-3">Did you skip {showPastDateForm ? "this" : "today's"} session?</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              type="button"
+              variant={skipped === false ? "default" : "outline"}
+              size="lg"
+              onClick={() => setSkipped(false)}
+              className="min-h-[48px] text-base font-bold"
+            >
+              No — I completed my session
+            </Button>
+            <Button
+              type="button"
+              variant={skipped === true ? "destructive" : "outline"}
+              size="lg"
+              onClick={() => setSkipped(true)}
+              className="min-h-[48px] text-base font-bold"
+            >
+              Yes — I skipped it
+            </Button>
           </div>
-          <Switch checked={skipped} onCheckedChange={setSkipped} />
         </div>
 
         {skipped ? (
