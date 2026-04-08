@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Sun, Shield, LogIn, LayoutDashboard, LogOut, MessageSquare, Bell, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,6 +29,7 @@ interface Notification {
 const SiteHeader = () => {
   const { user, userRole, signOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [notifCount, setNotifCount] = useState(0);
@@ -176,7 +177,7 @@ const SiteHeader = () => {
 
               <Link
                 href="/messages"
-                className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                className={`relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === "/messages" ? "bg-primary/10 text-primary" : "text-foreground hover:bg-secondary"}`}
               >
                 <MessageSquare className="w-4 h-4" />
                 <span className="hidden sm:inline">Messages</span>
@@ -188,7 +189,7 @@ const SiteHeader = () => {
               </Link>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === "/dashboard" ? "bg-primary/10 text-primary" : "text-foreground hover:bg-secondary"}`}
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span className="hidden sm:inline">Dashboard</span>
