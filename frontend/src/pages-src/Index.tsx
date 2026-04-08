@@ -59,12 +59,7 @@ const Index = () => {
               A university-approved research study exploring light therapy (photobiomodulation) as a gentle, noninvasive approach to preserve renal function and improve quality of life. Led by Sandra Brass, PhD Candidate at Quantum University.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
-              <Button variant="outline-accent" size="lg" onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}>
-                Learn More
-                <ArrowDown className="w-4 h-4" />
-              </Button>
-            </div>
+            <div className="animate-fade-in" style={{ animationDelay: "0.3s" }} />
           </div>
         </div>
       </section>
