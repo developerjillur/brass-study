@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sun, Shield, LogIn, LayoutDashboard, LogOut, MessageSquare, Bell } from "lucide-react";
+import { Sun, Shield, LogIn, LayoutDashboard, LogOut, MessageSquare, Bell, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
@@ -193,6 +193,12 @@ const SiteHeader = () => {
                 <LayoutDashboard className="w-4 h-4" />
                 <span className="hidden sm:inline">Dashboard</span>
               </Link>
+              <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 text-sm text-foreground">
+                <UserCircle className="w-4 h-4 text-primary" />
+                <span className="font-medium max-w-[120px] truncate">
+                  {user?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "User"}
+                </span>
+              </div>
               <button
                 onClick={handleSignOut}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
