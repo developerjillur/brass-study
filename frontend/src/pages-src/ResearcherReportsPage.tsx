@@ -183,7 +183,7 @@ const ResearcherReportsPage = () => {
           </div>
 
           <Tabs defaultValue="renal" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 print:hidden">
+            <TabsList className="flex flex-wrap w-full gap-1 h-auto print:hidden">
               <TabsTrigger value="renal" className="flex items-center gap-1 text-xs">
                 <FlaskConical className="w-3 h-3" /> Renal
               </TabsTrigger>
