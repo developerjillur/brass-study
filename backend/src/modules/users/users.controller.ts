@@ -32,4 +32,9 @@ export class UsersController {
   getAllProfiles() {
     return this.usersService.getAllProfiles();
   }
+
+  @Get('researcher-id')
+  getResearcherId() {
+    return this.usersService.getResearcherId();
+  }
 }

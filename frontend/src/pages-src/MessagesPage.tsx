@@ -96,8 +96,8 @@ const MessagesPage = () => {
     }
 
     setParticipantId(participant.id);
-    const researcherId = await apiClient.post("/api/get_researcher_id").catch(() => null);
-    if (researcherId) setResearcherUserId(researcherId);
+    const researcherId = await apiClient.get("/api/users/researcher-id").catch(() => null);
+    if (researcherId) setResearcherUserId(researcherId as string);
 
     await loadMessages(participant.id);
     setIsLoading(false);
