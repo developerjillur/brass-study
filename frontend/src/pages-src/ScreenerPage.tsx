@@ -32,6 +32,7 @@ const renalPanelSchema = z.object({
   labDate: z.string().optional(),
   doctorName: z.string().max(100, "Doctor name too long").optional(),
   notes: z.string().max(1000, "Notes too long").optional(),
+  healthConsent: z.boolean().refine(val => val === true, "You must agree to the consent before submitting"),
 });
 
 type RenalPanelForm = z.infer<typeof renalPanelSchema>;
@@ -54,6 +55,7 @@ const ScreenerPage = () => {
       email: existingEmail,
       consentToContact: hasExistingScreening ? true : false,
       ckdStage: undefined,
+      healthConsent: false,
     },
   });
 
@@ -371,13 +373,16 @@ const ScreenerPage = () => {
                     <input
                       type="checkbox"
                       id="healthConsent"
-                      required
+                      {...form.register("healthConsent")}
                       className="mt-1 h-5 w-5 rounded border-input accent-primary cursor-pointer"
                     />
                     <Label htmlFor="healthConsent" className="text-sm font-normal text-foreground leading-relaxed cursor-pointer">
                       I have read and agree to the above consent. I authorize the sharing of my renal function panel results for eligibility screening purposes. <span className="text-destructive">*</span>
                     </Label>
                   </div>
+                  {form.formState.errors.healthConsent && (
+                    <p className="text-sm text-destructive font-medium">⚠️ {form.formState.errors.healthConsent.message}</p>
+                  )}
                 </div>
 
                 <div className="flex justify-center pt-6">
