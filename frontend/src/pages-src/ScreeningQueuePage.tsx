@@ -291,7 +291,7 @@ const ScreeningQueuePage = () => {
                         </div>
                         <p className="text-sm text-muted-foreground mb-1">{submission.email}</p>
                         <p className="text-xs text-muted-foreground">
-                          Submitted: {new Date(submission.created_at).toLocaleDateString()}
+                          Interest form: {new Date(submission.created_at).toLocaleDateString()}
                           {submission.consent_to_contact && " • Consents to contact"}
                         </p>
                       </div>
@@ -419,12 +419,12 @@ const ScreeningQueuePage = () => {
                                     <p>{submission.consent_to_contact ? "Yes" : "No"}</p>
                                   </div>
                                   <div>
-                                    <FieldLabel>Submitted</FieldLabel>
+                                    <FieldLabel>Interest Form Submitted</FieldLabel>
                                     <p>{new Date(submission.created_at).toLocaleString()}</p>
                                   </div>
                                   {submission.updated_at !== submission.created_at && (
                                     <div>
-                                      <FieldLabel>Last Updated</FieldLabel>
+                                      <FieldLabel>Status Changed</FieldLabel>
                                       <p>{new Date(submission.updated_at).toLocaleString()}</p>
                                     </div>
                                   )}
@@ -439,10 +439,15 @@ const ScreeningQueuePage = () => {
                                         <p className="capitalize">{renalData[submission.id]?.ckd_stage}</p>
                                       </div>
                                       <div>
-                                        <FieldLabel>Lab Date</FieldLabel>
+                                        <FieldLabel>Lab Test Date</FieldLabel>
                                         <p>{renalData[submission.id]?.lab_date ? new Date(renalData[submission.id]!.lab_date!).toLocaleDateString() : "Not specified"}</p>
                                       </div>
                                     </div>
+                                    {renalData[submission.id]?.created_at && (
+                                      <p className="text-xs text-muted-foreground">
+                                        Renal panel submitted: {new Date(renalData[submission.id]!.created_at).toLocaleString()}
+                                      </p>
+                                    )}
                                     <div className="grid grid-cols-3 gap-4">
                                       <div>
                                         <FieldLabel>eGFR</FieldLabel>
