@@ -6,6 +6,7 @@ import { ScreeningSubmission } from '../screening/entities/screening-submission.
 import { AuthService } from '../auth/auth.service';
 import { BlindingService } from '../blinding/blinding.service';
 import { AuditService } from '../audit/audit.service';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class InvitationsService {
@@ -17,6 +18,7 @@ export class InvitationsService {
     private authService: AuthService,
     private blindingService: BlindingService,
     private auditService: AuditService,
+    private emailService: EmailService,
   ) {}
 
   async inviteParticipant(
@@ -54,6 +56,22 @@ export class InvitationsService {
     screening.status = 'invited';
     screening.reviewedBy = researcherUserId;
     await this.screeningRepo.save(screening);
+
+    // Send invitation email with credentials
+    if (tempPassword) {
+      await this.emailService.sendInviteCredentialsEmail(
+        screening.email,
+        screening.fullName,
+        tempPassword,
+      );
+    }
+
+    // Also send the eligibility notification email
+    await this.emailService.sendScreeningStatusEmail(
+      screening.email,
+      screening.fullName,
+      'invited',
+    );
 
     // Audit log
     await this.auditService.log(

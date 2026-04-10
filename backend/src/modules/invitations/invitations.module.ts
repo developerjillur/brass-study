@@ -7,6 +7,7 @@ import { ScreeningSubmission } from '../screening/entities/screening-submission.
 import { AuthModule } from '../auth/auth.module';
 import { BlindingModule } from '../blinding/blinding.module';
 import { AuditModule } from '../audit/audit.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuditModule } from '../audit/audit.module';
     AuthModule,
     BlindingModule,
     AuditModule,
+    EmailModule,
   ],
   controllers: [InvitationsController],
   providers: [InvitationsService],
