@@ -77,6 +77,15 @@ export class EmailService {
     return { to: email, subject, body, sent, sentAt: new Date().toISOString() };
   }
 
+  async sendPasswordResetEmail(email: string, fullName: string, resetToken: string) {
+    const resetLink = `https://brassphdstudy.com/reset-password?token=${resetToken}`;
+    const subject = 'BRASS Study – Password Reset Request';
+    const body = `Dear ${fullName || 'Participant'},\n\nWe received a request to reset the password for your BRASS CKD Study Portal account.\n\nTo reset your password, click the link below (or copy and paste it into your browser). This link will expire in 1 hour.\n\n${resetLink}\n\nIMPORTANT: If you don't see this email in your inbox, please check your spam or junk folder. You may want to mark it as "not spam" so future emails from the study team reach you directly.\n\nIf you did not request a password reset, you can safely ignore this email — your password will not change.\n\nBest regards,\nSandra Brass\nBRASS Research Team`;
+
+    const sent = await this.sendEmail(email, subject, body);
+    return { to: email, subject, sent, sentAt: new Date().toISOString() };
+  }
+
   async sendInviteCredentialsEmail(
     email: string,
     fullName: string,

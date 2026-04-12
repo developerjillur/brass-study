@@ -8,12 +8,14 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { User } from '../users/entities/user.entity';
 import { Profile } from '../users/entities/profile.entity';
 import { UserRole } from '../users/entities/user-role.entity';
+import { EmailModule } from '../email/email.module';
 import { jwtConfig } from '../../config/jwt.config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Profile, UserRole]),
     PassportModule,
+    EmailModule,
     JwtModule.register({
       secret: jwtConfig.secret,
       signOptions: { expiresIn: '30m' as any },

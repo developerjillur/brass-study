@@ -15,6 +15,7 @@ import { UserRole } from '../users/entities/user-role.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ChangePasswordDto, ForgotPasswordDto, ResetPasswordDto } from './dto/change-password.dto';
+import { EmailService } from '../email/email.service';
 import { jwtConfig } from '../../config/jwt.config';
 
 @Injectable()
@@ -27,6 +28,7 @@ export class AuthService {
     @InjectRepository(UserRole)
     private userRoleRepo: Repository<UserRole>,
     private jwtService: JwtService,
+    private emailService: EmailService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -163,7 +165,7 @@ export class AuthService {
     user.resetTokenExpires = expires;
     await this.userRepo.save(user);
 
-    console.log(`[EMAIL] Password reset link for ${user.email}: token=${resetToken}`);
+    await this.emailService.sendPasswordResetEmail(user.email, user.fullName, resetToken);
 
     return { message: 'If the email exists, a reset link has been sent' };
   }

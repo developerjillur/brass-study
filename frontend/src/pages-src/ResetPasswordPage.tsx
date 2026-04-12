@@ -30,9 +30,17 @@ const ResetPasswordPage = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for recovery token in URL hash
+    // Token comes in ?token=... from the reset-password email link.
+    // Legacy Lovable flow used #type=recovery in the hash — still supported.
+    const queryToken = new URLSearchParams(window.location.search).get("token");
+    if (queryToken) {
+      setToken(queryToken);
+      setIsRecovery(true);
+      return;
+    }
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     if (hashParams.get("type") === "recovery") {
       setIsRecovery(true);
@@ -53,9 +61,14 @@ const ResetPasswordPage = () => {
       return;
     }
 
+    if (!token) {
+      toast.error("Reset link is missing or invalid. Please request a new one from the Forgot Password page.");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await apiClient.post("/api/auth/reset-password", { newPassword: password });
+      await apiClient.post("/api/auth/reset-password", { token, newPassword: password });
       toast.success("Password updated successfully!");
       router.push("/login");
     } catch (error: any) {
