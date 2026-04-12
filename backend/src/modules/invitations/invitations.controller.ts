@@ -17,4 +17,13 @@ export class InvitationsController {
   ) {
     return this.invitationsService.inviteParticipant(body.screeningId, userId);
   }
+
+  @Post('resend-temp-password')
+  @Roles('researcher')
+  resendTempPassword(
+    @CurrentUser('sub') researcherUserId: string,
+    @Body() body: { userId: string },
+  ) {
+    return this.invitationsService.resendTempPassword(body.userId, researcherUserId);
+  }
 }

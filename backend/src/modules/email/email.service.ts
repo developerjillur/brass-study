@@ -83,7 +83,7 @@ export class EmailService {
     tempPassword: string,
   ) {
     const subject = 'BRASS Study – Your Portal Login Credentials';
-    const body = `Dear ${fullName},\n\nYour account for the BRASS CKD Study Portal has been created.\n\nHere are your login credentials:\n\nEmail: ${email}\nTemporary Password: ${tempPassword}\n\nPlease visit https://brassphdstudy.com/login to sign in. You will be asked to change your password on your first login.\n\nIf you have any questions, please reply to this email or contact the research team through the portal.\n\nBest regards,\nSandra Brass\nBRASS Research Team`;
+    const body = `Dear ${fullName},\n\nYour account for the BRASS CKD Study Portal has been created.\n\nHere are your login credentials:\n\nEmail: ${email}\nTemporary Password: ${tempPassword}\n\nPlease visit https://brassphdstudy.com/login to sign in. You will be asked to change your password on your first login.\n\nIMPORTANT: If you don't see this email in your inbox, please check your spam or junk folder. You may want to mark it as "not spam" so future emails from the study team reach you directly.\n\nIf you have any questions, please reply to this email or contact the research team through the portal.\n\nBest regards,\nSandra Brass\nBRASS Research Team`;
 
     const sent = await this.sendEmail(email, subject, body);
     return { to: email, subject, sent, sentAt: new Date().toISOString() };

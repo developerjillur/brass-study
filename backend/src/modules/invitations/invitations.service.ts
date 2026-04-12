@@ -95,4 +95,29 @@ export class InvitationsService {
       message: `Participant invited successfully. ${tempPassword ? 'Temp password: ' + tempPassword : 'User already existed.'}`,
     };
   }
+
+  async resendTempPassword(userId: string, researcherUserId: string) {
+    const { user, tempPassword } = await this.authService.resetUserPassword(userId);
+
+    await this.emailService.sendInviteCredentialsEmail(
+      user.email,
+      user.fullName,
+      tempPassword,
+    );
+
+    await this.auditService.log(
+      researcherUserId,
+      'resend_temp_password',
+      'users',
+      user.id,
+      { email: user.email },
+    );
+
+    return {
+      user_id: user.id,
+      email: user.email,
+      temp_password: tempPassword,
+      message: 'Temporary password reset and emailed.',
+    };
+  }
 }

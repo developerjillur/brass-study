@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Users, Eye, Filter, Activity, CheckCircle, Clock, XCircle,
-  ClipboardList, FlaskConical, MessageSquare, TrendingUp, ArrowLeft, Download,
+  ClipboardList, FlaskConical, MessageSquare, TrendingUp, ArrowLeft, Download, KeyRound,
 } from "lucide-react";
 import { downloadCsv } from "@/lib/csv-export";
 import { apiClient } from "@/lib/api-client";
@@ -202,6 +202,19 @@ const ResearcherParticipantsPage = () => {
       fetchParticipants();
     } catch {
       toast({ title: "Error", description: "Failed to update status.", variant: "destructive" });
+    }
+  };
+
+  const handleResendPassword = async (userId: string, name: string, email: string) => {
+    const confirmed = window.confirm(
+      `Reset the password for "${name}" (${email}) and email a new temporary password?\n\nThey will be required to change it on their next login.`
+    );
+    if (!confirmed) return;
+    try {
+      await apiClient.post("/api/invitations/resend-temp-password", { userId });
+      toast({ title: "Password reset", description: `New temporary password emailed to ${email}.` });
+    } catch (err: any) {
+      toast({ title: "Error", description: err?.message || "Failed to reset password.", variant: "destructive" });
     }
   };
 
@@ -520,6 +533,16 @@ const ResearcherParticipantsPage = () => {
                           </div>
                         </TableCell>
                         <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleResendPassword(p.user_id, p.profile?.full_name || "participant", p.profile?.email || "")}
+                            title="Reset and email a new temporary password"
+                          >
+                            <KeyRound className="w-4 h-4 mr-1" />
+                            Resend Password
+                          </Button>
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button
@@ -925,6 +948,7 @@ const ResearcherParticipantsPage = () => {
                               )}
                             </DialogContent>
                           </Dialog>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}

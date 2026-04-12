@@ -229,6 +229,20 @@ export class AuthService {
     );
   }
 
+  async resetUserPassword(userId: string): Promise<{ user: User; tempPassword: string }> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    const tempPassword = this.generateTempPassword();
+    user.passwordHash = await bcrypt.hash(tempPassword, 12);
+    user.forcePasswordChange = true;
+    user.resetToken = null;
+    user.resetTokenExpires = null;
+    await this.userRepo.save(user);
+    return { user, tempPassword };
+  }
+
   private generateTempPassword(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
     let password = '';
