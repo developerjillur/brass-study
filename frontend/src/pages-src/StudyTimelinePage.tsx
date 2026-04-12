@@ -28,6 +28,7 @@ const StudyTimelinePage = () => {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [sessions, setSessions] = useState<DaySession[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [onboardingPending, setOnboardingPending] = useState(false);
   const totalDays = 84;
 
   useEffect(() => {
@@ -41,7 +42,8 @@ const StudyTimelinePage = () => {
     const participant = await apiClient.get("/api/participants/me").catch(() => []);
 
     if (!participant || !participant.onboarding_completed) {
-      router.push("/dashboard");
+      setOnboardingPending(true);
+      setIsLoading(false);
       return;
     }
 
@@ -122,6 +124,35 @@ const StudyTimelinePage = () => {
       <PublicLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      </PublicLayout>
+    );
+  }
+
+  if (onboardingPending) {
+    return (
+      <PublicLayout>
+        <div className="container py-8 md:py-12">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-4 mb-6">
+              <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard")}>
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <h1 className="text-heading font-serif font-bold text-foreground">My Study Timeline</h1>
+            </div>
+            <Card className="shadow-card">
+              <CardContent className="p-8 text-center space-y-4">
+                <CalendarDays className="w-12 h-12 text-muted-foreground mx-auto" />
+                <h2 className="text-xl font-semibold text-foreground">Timeline Not Available Yet</h2>
+                <p className="text-muted-foreground">
+                  Your personalized study timeline will appear here once you finish your onboarding (consent, intake form, and baseline assessments).
+                </p>
+                <Button onClick={() => router.push("/onboarding")}>
+                  Continue Onboarding
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </PublicLayout>
     );

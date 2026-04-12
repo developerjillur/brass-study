@@ -83,8 +83,15 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
 
   const canAdvance1 = form.date_of_birth && form.age && form.age > 0 && form.sex && form.ethnicity;
   const canAdvance2 = form.comorbidities.length > 0;
-  const canAdvance3 = form.emergency_contact_name && form.emergency_contact_phone;
+  const canAdvance3 = form.emergency_contact_name.trim().length > 0 && form.emergency_contact_phone.trim().length > 0;
   const canSubmit = form.signature_text.length >= 3 && signatureConfirm;
+
+  const missingSection3Fields = () => {
+    const missing: string[] = [];
+    if (!form.emergency_contact_name.trim()) missing.push("Contact Name");
+    if (!form.emergency_contact_phone.trim()) missing.push("Contact Phone");
+    return missing;
+  };
 
   const sectionTitles = [
     { title: "Demographics", icon: UserCircle },
@@ -307,6 +314,11 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
                 </Select>
               </div>
             </div>
+            {!canAdvance3 && (
+              <p className="text-sm text-muted-foreground">
+                Please fill in: <span className="font-medium text-foreground">{missingSection3Fields().join(", ")}</span> to continue.
+              </p>
+            )}
           </div>
         )}
 

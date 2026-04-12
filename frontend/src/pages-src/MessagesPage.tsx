@@ -86,20 +86,17 @@ const MessagesPage = () => {
       return;
     }
 
-    // Participant flow
-    const participant = await apiClient.get("/api/participants/me").catch(() => []);
+    // Participant flow — allow messaging even during onboarding (they may need help finishing it)
+    const participant = await apiClient.get("/api/participants/me").catch(() => null);
 
-    if (!participant || !participant.onboarding_completed) {
-      toast({ title: "Please complete onboarding first. Go to your dashboard to begin.", variant: "destructive" });
-      router.push("/onboarding");
-      return;
+    if (participant && participant.id) {
+      setParticipantId(participant.id);
+      await loadMessages(participant.id);
     }
 
-    setParticipantId(participant.id);
     const res = await apiClient.get("/api/users/researcher-id").catch(() => null);
     if (res?.researcher_id) setResearcherUserId(res.researcher_id);
 
-    await loadMessages(participant.id);
     setIsLoading(false);
   };
 
