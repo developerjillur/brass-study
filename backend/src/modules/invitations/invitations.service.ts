@@ -39,6 +39,18 @@ export class InvitationsService {
       'participant',
     );
 
+    // Guard: a participant record may already exist for this user from a prior
+    // invitation or test — inserting a second one would violate the unique index
+    // on participants.user_id and surface as a generic 500 to the researcher.
+    const existingParticipant = await this.participantRepo.findOne({ where: { userId: user.id } });
+    if (existingParticipant) {
+      throw new BadRequestException(
+        `A participant record already exists for ${screening.email}. ` +
+        `If this person needs a fresh invitation, remove the existing participant first, ` +
+        `or use "Resend Password" from the Participants page to send them a new temporary password.`
+      );
+    }
+
     // Create participant record
     const participant = this.participantRepo.create({
       userId: user.id,
