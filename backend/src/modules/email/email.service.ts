@@ -77,6 +77,20 @@ export class EmailService {
     return { to: email, subject, body, sent, sentAt: new Date().toISOString() };
   }
 
+  async sendNewMessageNotification(
+    recipientEmail: string,
+    recipientName: string,
+    senderName: string,
+    messageBody: string,
+  ) {
+    const snippet = messageBody.length > 250 ? messageBody.substring(0, 250) + '…' : messageBody;
+    const subject = `BRASS Study – New message from ${senderName}`;
+    const body = `Dear ${recipientName || 'there'},\n\n${senderName} just sent you a message through the BRASS CKD Study Portal.\n\nMessage:\n"${snippet}"\n\nLog in at https://brassphdstudy.com/messages to read the full message and reply.\n\nIMPORTANT: If you don't see this email in your inbox, please check your spam or junk folder and mark it as "not spam" so future notifications reach you directly.\n\nBest regards,\nBRASS Research Team`;
+
+    const sent = await this.sendEmail(recipientEmail, subject, body);
+    return { to: recipientEmail, subject, sent, sentAt: new Date().toISOString() };
+  }
+
   async sendPasswordResetEmail(email: string, fullName: string, resetToken: string) {
     const resetLink = `https://brassphdstudy.com/reset-password?token=${resetToken}`;
     const subject = 'BRASS Study – Password Reset Request';

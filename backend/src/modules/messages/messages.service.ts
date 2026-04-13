@@ -1,14 +1,39 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
+import { User } from '../users/entities/user.entity';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class MessagesService {
+  private readonly logger = new Logger(MessagesService.name);
+
   constructor(
     @InjectRepository(Message)
     private messageRepo: Repository<Message>,
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
+    private emailService: EmailService,
   ) {}
+
+  private async notifyRecipientByEmail(senderId: string, recipientId: string, body: string) {
+    try {
+      const [sender, recipient] = await Promise.all([
+        this.userRepo.findOne({ where: { id: senderId } }),
+        this.userRepo.findOne({ where: { id: recipientId } }),
+      ]);
+      if (!recipient?.email || !sender) return;
+      await this.emailService.sendNewMessageNotification(
+        recipient.email,
+        recipient.fullName || '',
+        sender.fullName || 'the BRASS team',
+        body || '',
+      );
+    } catch (err: any) {
+      this.logger.warn(`Failed to send new-message email: ${err?.message || err}`);
+    }
+  }
 
   async send(
     senderId: string,
@@ -18,7 +43,11 @@ export class MessagesService {
       ...data,
       senderId,
     });
-    return this.messageRepo.save(message);
+    const saved = await this.messageRepo.save(message);
+    if (saved.recipientId && saved.recipientId !== senderId) {
+      void this.notifyRecipientByEmail(senderId, saved.recipientId, saved.body || '');
+    }
+    return saved;
   }
 
   async broadcast(
@@ -37,7 +66,13 @@ export class MessagesService {
         participantId: participantId || null,
       }),
     );
-    return this.messageRepo.save(messages);
+    const saved = await this.messageRepo.save(messages);
+    for (const m of saved) {
+      if (m.recipientId && m.recipientId !== senderId) {
+        void this.notifyRecipientByEmail(senderId, m.recipientId, m.body || '');
+      }
+    }
+    return saved;
   }
 
   async findByUserId(userId: string): Promise<Message[]> {
