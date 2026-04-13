@@ -28,7 +28,14 @@ async function request<T>(
   });
 
   if (!res.ok) {
-    if (res.status === 401) {
+    // Auto-redirect on session expiry, but NOT when the 401 came from an auth
+    // endpoint — otherwise a wrong-password submit reloads /login before the
+    // error toast can render, which looks like "Study Login is on a loop".
+    const isAuthEndpoint = path.startsWith('/api/auth/login')
+      || path.startsWith('/api/auth/register')
+      || path.startsWith('/api/auth/forgot-password')
+      || path.startsWith('/api/auth/reset-password');
+    if (res.status === 401 && !isAuthEndpoint) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
         window.location.href = '/login';
