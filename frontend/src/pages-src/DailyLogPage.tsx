@@ -52,7 +52,7 @@ const DailyLogPage = () => {
     }
 
     if (!data.onboarding_completed || data.status !== "active") {
-      toast({ title: "Please complete your study setup first", variant: "destructive" });
+      toast({ title: "Finish 'Join the Study' first", description: "Complete your intake form and baseline steps on the dashboard to unlock this page." });
       router.push("/dashboard");
       return;
     }

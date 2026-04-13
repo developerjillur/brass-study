@@ -179,12 +179,16 @@ const DashboardPage = () => {
                   title="Daily Log"
                   description="Submit your therapy session log for today."
                   onClick={() => router.push("/daily-log")}
+                  disabled={onboardingNeeded}
+                  label={onboardingNeeded ? "Finish 'Join the Study' to unlock" : undefined}
                 />
                 <DashCard
                   icon={<FlaskConical className="w-7 h-7" />}
                   title="Lab Results"
                   description="Enter your latest renal function panel results."
                   onClick={() => router.push("/lab-results")}
+                  disabled={onboardingNeeded}
+                  label={onboardingNeeded ? "Finish 'Join the Study' to unlock" : undefined}
                 />
                 <DashCard
                   icon={<FileText className="w-7 h-7" />}
@@ -192,6 +196,8 @@ const DashboardPage = () => {
                   description="Complete questionnaires at the start and end of the study."
                   onClick={() => router.push("/assessments")}
                   badge={dueAssessmentCount > 0 ? dueAssessmentCount : undefined}
+                  disabled={onboardingNeeded}
+                  label={onboardingNeeded ? "Finish 'Join the Study' to unlock" : undefined}
                 />
                 <DashCard
                   icon={<MessageSquare className="w-7 h-7" />}

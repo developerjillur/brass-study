@@ -48,7 +48,7 @@ const AssessmentsPage = () => {
     const participant = await apiClient.get("/api/participants/me").catch(() => []);
 
     if (!participant || !participant.onboarding_completed || participant.status !== "active") {
-      toast({ title: "Please complete your study setup first", variant: "destructive" });
+      toast({ title: "Finish 'Join the Study' first", description: "Complete your intake form and baseline steps on the dashboard to unlock this page." });
       router.push("/dashboard");
       return;
     }
