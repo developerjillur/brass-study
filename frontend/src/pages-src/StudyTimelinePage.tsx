@@ -145,11 +145,16 @@ const StudyTimelinePage = () => {
                 <CalendarDays className="w-12 h-12 text-muted-foreground mx-auto" />
                 <h2 className="text-xl font-semibold text-foreground">Timeline Not Available Yet</h2>
                 <p className="text-muted-foreground">
-                  Your personalized study timeline will appear here once you finish your onboarding (consent, intake form, and baseline assessments).
+                  Your personalized study timeline will appear here once you finish your intake form, sign the IRB consent, and complete your baseline assessments.
                 </p>
-                <Button onClick={() => router.push("/onboarding")}>
-                  Continue Onboarding
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                  <Button onClick={() => router.push("/onboarding")}>
+                    Finish My Intake Form
+                  </Button>
+                  <Button variant="outline" onClick={() => router.push("/dashboard")}>
+                    Back to Dashboard
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>

@@ -86,6 +86,21 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
   const canAdvance3 = form.emergency_contact_name.trim().length > 0 && form.emergency_contact_phone.trim().length > 0;
   const canSubmit = form.signature_text.length >= 3 && signatureConfirm;
 
+  const missingSection1Fields = () => {
+    const missing: string[] = [];
+    if (!form.date_of_birth) missing.push("Date of Birth");
+    if (!form.age || form.age <= 0) missing.push("Age");
+    if (!form.sex) missing.push("Biological Sex");
+    if (!form.ethnicity) missing.push("Ethnicity");
+    return missing;
+  };
+
+  const missingSection2Fields = () => {
+    const missing: string[] = [];
+    if (form.comorbidities.length === 0) missing.push("Comorbidities (select at least one, or choose 'None of the above')");
+    return missing;
+  };
+
   const missingSection3Fields = () => {
     const missing: string[] = [];
     if (!form.emergency_contact_name.trim()) missing.push("Contact Name");
@@ -193,6 +208,11 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
                 </SelectContent>
               </Select>
             </div>
+            {!canAdvance1 && (
+              <p className="text-sm text-muted-foreground">
+                Please fill in: <span className="font-medium text-foreground">{missingSection1Fields().join(", ")}</span> to continue.
+              </p>
+            )}
           </div>
         )}
 
@@ -268,6 +288,11 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
                 />
               </div>
             </div>
+            {!canAdvance2 && (
+              <p className="text-sm text-muted-foreground">
+                Please fill in: <span className="font-medium text-foreground">{missingSection2Fields().join(", ")}</span> to continue.
+              </p>
+            )}
           </div>
         )}
 
