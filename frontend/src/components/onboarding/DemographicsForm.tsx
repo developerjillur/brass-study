@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +44,8 @@ const COMORBIDITY_OPTIONS = [
 
 const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) => {
   const [section, setSection] = useState<1 | 2 | 3 | 4>(1);
+  const [showValidationError, setShowValidationError] = useState(false);
+  const topRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<DemographicsData>({
     date_of_birth: "",
     age: null,
@@ -108,6 +110,35 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
     return missing;
   };
 
+  const missingForSection = (s: number) => {
+    if (s === 1) return missingSection1Fields();
+    if (s === 2) return missingSection2Fields();
+    if (s === 3) return missingSection3Fields();
+    return [];
+  };
+
+  const canAdvanceSection = (s: number) => {
+    if (s === 1) return canAdvance1;
+    if (s === 2) return canAdvance2;
+    if (s === 3) return canAdvance3;
+    return false;
+  };
+
+  const handleNext = () => {
+    if (!canAdvanceSection(section)) {
+      setShowValidationError(true);
+      return;
+    }
+    setShowValidationError(false);
+    setSection((s) => (s + 1) as any);
+  };
+
+  // Scroll to top whenever the section changes so users see the transition
+  useEffect(() => {
+    setShowValidationError(false);
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [section]);
+
   const sectionTitles = [
     { title: "Demographics", icon: UserCircle },
     { title: "Medical History & Medications", icon: Stethoscope },
@@ -119,6 +150,7 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
 
   return (
     <Card className="shadow-card">
+      <div ref={topRef} />
       <CardHeader>
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary">
@@ -380,6 +412,18 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
           </div>
         )}
 
+        {/* Validation error banner — shown when user clicks Next but required fields are missing */}
+        {showValidationError && section < 4 && missingForSection(section).length > 0 && (
+          <div className="p-3 rounded-md border border-destructive bg-destructive/10 text-sm text-destructive">
+            <p className="font-medium">Please complete these fields before continuing:</p>
+            <ul className="list-disc pl-5 mt-1">
+              {missingForSection(section).map((field) => (
+                <li key={field}>{field}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Navigation */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
           {section > 1 ? (
@@ -391,14 +435,7 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
           )}
 
           {section < 4 ? (
-            <Button
-              onClick={() => setSection((s) => (s + 1) as any)}
-              disabled={
-                (section === 1 && !canAdvance1) ||
-                (section === 2 && !canAdvance2) ||
-                (section === 3 && !canAdvance3)
-              }
-            >
+            <Button onClick={handleNext}>
               Next
             </Button>
           ) : (
