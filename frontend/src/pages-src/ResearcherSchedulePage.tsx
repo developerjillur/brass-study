@@ -11,12 +11,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   ArrowLeft,
   CheckCircle2,
   Clock,
   AlertTriangle,
   CalendarDays,
+  ExternalLink,
+  Save,
 } from "lucide-react";
 import { ASSESSMENT_SCHEDULE, ASSESSMENT_WINDOW_DAYS } from "@/data/assessment-schedule";
 import { LAB_SCHEDULE, LAB_WINDOW_DAYS } from "@/data/lab-schedule";
@@ -57,10 +61,39 @@ const ResearcherSchedulePage = () => {
   const { toast } = useToast();
   const [rows, setRows] = useState<ParticipantScheduleRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [calendlyUrl, setCalendlyUrl] = useState("");
+  const [calendlyInput, setCalendlyInput] = useState("");
+  const [savingCalendly, setSavingCalendly] = useState(false);
 
   useEffect(() => {
-    if (user && userRole === "researcher") loadData();
+    if (user && userRole === "researcher") {
+      loadData();
+      loadCalendlyUrl();
+    }
   }, [user, userRole]);
+
+  const loadCalendlyUrl = async () => {
+    try {
+      const setting = await apiClient.get("/api/study-settings/calendly_url");
+      if (setting?.setting_value) {
+        setCalendlyUrl(setting.setting_value);
+        setCalendlyInput(setting.setting_value);
+      }
+    } catch {}
+  };
+
+  const saveCalendlyUrl = async () => {
+    setSavingCalendly(true);
+    try {
+      await apiClient.put("/api/study-settings/calendly_url", { value: calendlyInput.trim() });
+      setCalendlyUrl(calendlyInput.trim());
+      toast({ title: "Calendly link saved", description: "Participants will see the updated scheduling link on their Messages page." });
+    } catch (err: any) {
+      toast({ title: "Error saving link", description: err.message, variant: "destructive" });
+    } finally {
+      setSavingCalendly(false);
+    }
+  };
 
   const loadData = async () => {
     const participants = await apiClient.get("/api/participants").catch(() => []);
@@ -205,6 +238,50 @@ const ResearcherSchedulePage = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* Calendly / Scheduling Link */}
+          <Card className="mb-6">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-primary" />
+                Participant Scheduling Link (Calendly / Zoom)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Paste your Calendly (or any scheduling) link below. Participants will see a "Schedule a Meeting" button on their Messages page that opens this link.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex-1">
+                  <Label htmlFor="calendly-url" className="sr-only">Scheduling Link</Label>
+                  <Input
+                    id="calendly-url"
+                    type="url"
+                    placeholder="https://calendly.com/your-link"
+                    value={calendlyInput}
+                    onChange={(e) => setCalendlyInput(e.target.value)}
+                  />
+                </div>
+                <Button onClick={saveCalendlyUrl} disabled={savingCalendly || calendlyInput.trim() === calendlyUrl} className="gap-2">
+                  <Save className="w-4 h-4" />
+                  {savingCalendly ? "Saving..." : "Save Link"}
+                </Button>
+                {calendlyUrl && (
+                  <Button variant="outline" asChild className="gap-2">
+                    <a href={calendlyUrl} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4" />
+                      Preview
+                    </a>
+                  </Button>
+                )}
+              </div>
+              {calendlyUrl && (
+                <p className="text-xs text-muted-foreground">
+                  Currently set to: <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">{calendlyUrl}</a>
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Schedule matrix */}
           <Card className="shadow-card">
