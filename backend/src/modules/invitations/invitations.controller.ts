@@ -26,4 +26,13 @@ export class InvitationsController {
   ) {
     return this.invitationsService.resendTempPassword(body.userId, researcherUserId);
   }
+
+  @Post('send-scheduling-invite')
+  @Roles('researcher')
+  sendSchedulingInvite(
+    @CurrentUser('sub') researcherUserId: string,
+    @Body() body: { userId: string },
+  ) {
+    return this.invitationsService.sendSchedulingInvite(body.userId, researcherUserId);
+  }
 }

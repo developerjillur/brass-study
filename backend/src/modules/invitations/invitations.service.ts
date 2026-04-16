@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Participant } from '../participants/entities/participant.entity';
 import { ScreeningSubmission } from '../screening/entities/screening-submission.entity';
+import { User } from '../users/entities/user.entity';
+import { StudySetting } from '../study-settings/entities/study-setting.entity';
 import { AuthService } from '../auth/auth.service';
 import { BlindingService } from '../blinding/blinding.service';
 import { AuditService } from '../audit/audit.service';
@@ -15,6 +17,10 @@ export class InvitationsService {
     private participantRepo: Repository<Participant>,
     @InjectRepository(ScreeningSubmission)
     private screeningRepo: Repository<ScreeningSubmission>,
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
+    @InjectRepository(StudySetting)
+    private settingRepo: Repository<StudySetting>,
     private authService: AuthService,
     private blindingService: BlindingService,
     private auditService: AuditService,
@@ -130,6 +136,32 @@ export class InvitationsService {
       email: user.email,
       temp_password: tempPassword,
       message: 'Temporary password reset and emailed.',
+    };
+  }
+
+  async sendSchedulingInvite(userId: string, researcherUserId: string) {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new BadRequestException('User not found');
+
+    const setting = await this.settingRepo.findOne({ where: { settingKey: 'calendly_url' } });
+    if (!setting?.settingValue) {
+      throw new BadRequestException('No scheduling link configured. Go to Researcher Dashboard → Scheduling to set your Calendly URL first.');
+    }
+
+    await this.emailService.sendSchedulingInvite(user.email, user.fullName, setting.settingValue);
+
+    await this.auditService.log(
+      researcherUserId,
+      'send_scheduling_invite',
+      'users',
+      user.id,
+      { email: user.email, calendly_url: setting.settingValue },
+    );
+
+    return {
+      user_id: user.id,
+      email: user.email,
+      message: `Scheduling invite emailed to ${user.email}.`,
     };
   }
 }

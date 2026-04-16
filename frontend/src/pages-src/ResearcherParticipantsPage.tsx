@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Users, Eye, Filter, Activity, CheckCircle, Clock, XCircle,
-  ClipboardList, FlaskConical, MessageSquare, TrendingUp, ArrowLeft, Download, KeyRound,
+  ClipboardList, FlaskConical, MessageSquare, TrendingUp, ArrowLeft, Download, KeyRound, CalendarPlus,
 } from "lucide-react";
 import { downloadCsv } from "@/lib/csv-export";
 import { apiClient } from "@/lib/api-client";
@@ -215,6 +215,19 @@ const ResearcherParticipantsPage = () => {
       toast({ title: "Password reset", description: `New temporary password emailed to ${email}.` });
     } catch (err: any) {
       toast({ title: "Error", description: err?.message || "Failed to reset password.", variant: "destructive" });
+    }
+  };
+
+  const handleSchedulingInvite = async (userId: string, name: string, email: string) => {
+    const confirmed = window.confirm(
+      `Send a scheduling invite to "${name}" (${email})?\n\nThey'll receive an email with your Calendly link to book a check-in meeting.`
+    );
+    if (!confirmed) return;
+    try {
+      await apiClient.post("/api/invitations/send-scheduling-invite", { userId });
+      toast({ title: "Scheduling invite sent", description: `Calendly link emailed to ${email}.` });
+    } catch (err: any) {
+      toast({ title: "Error", description: err?.message || "Failed to send invite.", variant: "destructive" });
     }
   };
 
@@ -539,6 +552,15 @@ const ResearcherParticipantsPage = () => {
                           >
                             <KeyRound className="w-4 h-4 mr-1" />
                             Resend Password
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSchedulingInvite(p.user_id, p.profile?.full_name || "participant", p.profile?.email || "")}
+                            title="Email this participant a Calendly link to schedule a meeting"
+                          >
+                            <CalendarPlus className="w-4 h-4 mr-1" />
+                            Invite to Schedule
                           </Button>
                           <Dialog>
                             <DialogTrigger asChild>

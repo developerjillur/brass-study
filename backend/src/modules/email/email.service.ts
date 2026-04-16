@@ -77,6 +77,18 @@ export class EmailService {
     return { to: email, subject, body, sent, sentAt: new Date().toISOString() };
   }
 
+  async sendSchedulingInvite(
+    recipientEmail: string,
+    recipientName: string,
+    calendlyUrl: string,
+  ) {
+    const subject = 'BRASS Study – Schedule Your Check-In Meeting';
+    const body = `Dear ${recipientName || 'Participant'},\n\nSandra Brass would like to schedule a check-in meeting with you as part of the BRASS CKD Study.\n\nPlease use the link below to pick a time that works for you:\n\n${calendlyUrl}\n\nYou can also find this scheduling link anytime by logging in to https://brassphdstudy.com/messages and scrolling to the "Schedule a Meeting" section.\n\nIMPORTANT: If you don't see this email in your inbox, please check your spam or junk folder and mark it as "not spam" so future emails reach you directly.\n\nBest regards,\nSandra Brass\nBRASS Research Team`;
+
+    const sent = await this.sendEmail(recipientEmail, subject, body);
+    return { to: recipientEmail, subject, sent, sentAt: new Date().toISOString() };
+  }
+
   async sendNewMessageNotification(
     recipientEmail: string,
     recipientName: string,
