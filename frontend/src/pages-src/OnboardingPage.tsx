@@ -86,6 +86,9 @@ const OnboardingPage = () => {
       setShowCompletion(true);
     } else {
       setCurrentStep(nextStep);
+      // Scroll to top so the new step is visible
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.querySelector("main")?.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 

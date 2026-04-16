@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -64,6 +64,13 @@ const QUESTIONS_PER_PAGE = 5;
 const AUTOSAVE_KEY = "assessment_autosave";
 
 const AssessmentForm = ({ questionnaire, onComplete, isSubmitting }: AssessmentFormProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const scrollToTop = () => {
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const loadSaved = (): Record<string, number> => {
     try {
       const saved = localStorage.getItem(`${AUTOSAVE_KEY}_${questionnaire.id}`);
@@ -130,7 +137,7 @@ const AssessmentForm = ({ questionnaire, onComplete, isSubmitting }: AssessmentF
   };
 
   return (
-    <Card className="shadow-card">
+    <Card className="shadow-card" ref={cardRef}>
       <CardHeader>
         <CardTitle className="text-xl">{questionnaire.title}</CardTitle>
         <CardDescription>{questionnaire.description}</CardDescription>
@@ -202,11 +209,11 @@ const AssessmentForm = ({ questionnaire, onComplete, isSubmitting }: AssessmentF
         </TooltipProvider>
 
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
-          <Button variant="outline" onClick={() => { setCurrentPage((p) => p - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={currentPage === 0}>
+          <Button variant="outline" onClick={() => { setCurrentPage((p) => p - 1); setTimeout(scrollToTop, 50); }} disabled={currentPage === 0}>
             <ChevronLeft className="w-4 h-4 mr-1" /> Previous
           </Button>
           {currentPage < totalPages - 1 ? (
-            <Button onClick={() => { setCurrentPage((p) => p + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={!allPageAnswered}>
+            <Button onClick={() => { setCurrentPage((p) => p + 1); setTimeout(scrollToTop, 50); }} disabled={!allPageAnswered}>
               Next <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (

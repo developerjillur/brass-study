@@ -46,6 +46,37 @@ export class RenalPanelsController {
     });
   }
 
+  @Post()
+  createBaseline(
+    @CurrentUser('sub') userId: string,
+    @Body()
+    body: {
+      ckd_stage?: string;
+      bun?: number;
+      creatinine?: number;
+      egfr?: number;
+      calcium?: number;
+      phosphorus?: number;
+      albumin?: number;
+      lab_date?: string;
+      doctor_name?: string;
+      notes?: string;
+    },
+  ) {
+    return this.renalPanelsService.createBaselineSubmission(userId, {
+      ckdStage: body.ckd_stage,
+      bun: body.bun,
+      creatinine: body.creatinine,
+      egfr: body.egfr,
+      calcium: body.calcium,
+      phosphorus: body.phosphorus,
+      albumin: body.albumin,
+      labDate: body.lab_date ? new Date(body.lab_date) : undefined,
+      doctorName: body.doctor_name,
+      notes: body.notes,
+    });
+  }
+
   @Post('follow-up')
   createFollowUp(
     @CurrentUser('sub') userId: string,

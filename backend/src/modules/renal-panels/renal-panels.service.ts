@@ -18,6 +18,18 @@ export class RenalPanelsService {
     return this.renalPanelRepo.save(submission);
   }
 
+  async createBaselineSubmission(
+    userId: string,
+    data: Partial<RenalPanelSubmission>,
+  ): Promise<RenalPanelSubmission> {
+    const submission = this.renalPanelRepo.create({
+      ...data,
+      participantUserId: userId,
+      submissionType: 'baseline',
+    } as Partial<RenalPanelSubmission>);
+    return this.renalPanelRepo.save(submission as RenalPanelSubmission);
+  }
+
   async createFollowUpSubmission(
     userId: string,
     data: Partial<RenalPanelSubmission>,

@@ -55,11 +55,11 @@ export class RenalPanelSubmission {
 
   @Column({
     type: 'enum',
-    enum: ['screening', 'followup'],
+    enum: ['screening', 'baseline', 'followup', 'follow_up'],
     name: 'submission_type',
     default: 'screening',
   })
-  submissionType: 'screening' | 'followup';
+  submissionType: 'screening' | 'baseline' | 'followup' | 'follow_up';
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
