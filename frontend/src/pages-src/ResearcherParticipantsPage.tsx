@@ -340,9 +340,6 @@ const ResearcherParticipantsPage = () => {
             study_day: s.study_day,
             duration_minutes: s.duration_minutes,
             body_area: s.body_area,
-            pain_before: s.pain_level_before,
-            pain_after: s.pain_level_after,
-            fatigue: s.fatigue_level,
             skipped: s.skipped,
             skip_reason: s.skip_reason,
             side_effects: s.side_effects,
@@ -652,8 +649,6 @@ const ResearcherParticipantsPage = () => {
                                             <TableHead>Day</TableHead>
                                             <TableHead>Duration</TableHead>
                                             <TableHead>Body Area</TableHead>
-                                            <TableHead>Pain (B→A)</TableHead>
-                                            <TableHead>Fatigue</TableHead>
                                             <TableHead>Status</TableHead>
                                           </TableRow>
                                         </TableHeader>
@@ -666,12 +661,6 @@ const ResearcherParticipantsPage = () => {
                                               <TableCell>{s.study_day ?? "—"}</TableCell>
                                               <TableCell>{s.skipped ? "—" : `${s.duration_minutes}m`}</TableCell>
                                               <TableCell className="text-sm">{s.body_area || "—"}</TableCell>
-                                              <TableCell>
-                                                {s.skipped
-                                                  ? "—"
-                                                  : `${s.pain_level_before ?? "?"} → ${s.pain_level_after ?? "?"}`}
-                                              </TableCell>
-                                              <TableCell>{s.fatigue_level ?? "—"}</TableCell>
                                               <TableCell>
                                                 {s.skipped ? (
                                                   <Badge variant="secondary">Skipped</Badge>
