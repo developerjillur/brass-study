@@ -108,7 +108,7 @@ const MessagesPage = () => {
     if (data && user) {
       const unread = data.filter((m: any) => !m.is_read && m.recipient_id === user.id);
       for (const msg of unread) {
-        await apiClient.put(`/api/messages/${(msg as any).id}`, { is_read: true });
+        await apiClient.put(`/api/messages/${(msg as any).id}/read`, {}).catch(() => {});
       }
     }
   };
