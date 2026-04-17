@@ -560,7 +560,7 @@ const ResearcherParticipantsPage = () => {
                             title="Email this participant a Calendly link to schedule a meeting"
                           >
                             <CalendarPlus className="w-4 h-4 mr-1" />
-                            Invite to Schedule
+                            Schedule
                           </Button>
                           <Dialog>
                             <DialogTrigger asChild>
