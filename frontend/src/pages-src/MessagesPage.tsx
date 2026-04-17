@@ -326,8 +326,24 @@ const MessagesPage = () => {
             </p>
           )}
 
-          {/* Calendly widget — visible to participants, configurable by researcher */}
-          <CalendlyWidget calendlyUrl={calendlyUrl} />
+          {/* Calendly widget — only shown to participants; researcher manages availability on calendly.com */}
+          {userRole === "participant" && (
+            <CalendlyWidget calendlyUrl={calendlyUrl} />
+          )}
+          {userRole === "researcher" && calendlyUrl && (
+            <div className="mt-4 p-4 rounded-lg border border-border bg-muted/30">
+              <p className="text-sm text-muted-foreground">
+                <strong>Your Calendly link:</strong>{" "}
+                <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">{calendlyUrl}</a>
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                To manage your availability, log in at{" "}
+                <a href="https://calendly.com/event_types" target="_blank" rel="noopener noreferrer" className="text-primary underline">calendly.com</a>
+                {" "}→ edit your event → set available time slots. You can update the link in{" "}
+                <a href="/researcher/schedule" className="text-primary underline">Scheduling settings</a>.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </PublicLayout>
