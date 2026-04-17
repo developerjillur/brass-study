@@ -212,7 +212,7 @@ const ResearcherParticipantsPage = () => {
     if (!confirmed) return;
     try {
       await apiClient.post("/api/invitations/resend-temp-password", { userId });
-      toast({ title: "Password reset", description: `New temporary password emailed to ${email}.` });
+      toast({ title: "Password reset", description: `New temporary password emailed to ${email}. Remind them to check spam if they don't see it.` });
     } catch (err: any) {
       toast({ title: "Error", description: err?.message || "Failed to reset password.", variant: "destructive" });
     }
@@ -220,12 +220,12 @@ const ResearcherParticipantsPage = () => {
 
   const handleSchedulingInvite = async (userId: string, name: string, email: string) => {
     const confirmed = window.confirm(
-      `Send a scheduling invite to "${name}" (${email})?\n\nThey'll receive an email with your Calendly link to book a check-in meeting.`
+      `Send a scheduling invite to "${name}" (${email})?\n\nThey'll receive an email with your Calendly link to book a check-in meeting.\n\nTip: The email may land in their spam folder. Consider sending them a portal message as well to let them know to check spam.`
     );
     if (!confirmed) return;
     try {
       await apiClient.post("/api/invitations/send-scheduling-invite", { userId });
-      toast({ title: "Scheduling invite sent", description: `Calendly link emailed to ${email}.` });
+      toast({ title: "Scheduling invite sent", description: `Calendly link emailed to ${email}. Reminder: ask the participant to check their spam folder if they don't see it.` });
     } catch (err: any) {
       toast({ title: "Error", description: err?.message || "Failed to send invite.", variant: "destructive" });
     }
