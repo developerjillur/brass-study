@@ -14,6 +14,14 @@ export class ParticipantIntakeService {
     userId: string,
     data: Partial<ParticipantIntake>,
   ): Promise<ParticipantIntake> {
+    // Upsert: if an intake already exists for this participant, update it
+    const existing = data.participantId
+      ? await this.intakeRepo.findOne({ where: { participantId: data.participantId } })
+      : await this.intakeRepo.findOne({ where: { userId } });
+    if (existing) {
+      Object.assign(existing, data, { userId });
+      return this.intakeRepo.save(existing);
+    }
     const intake = this.intakeRepo.create({
       ...data,
       userId,

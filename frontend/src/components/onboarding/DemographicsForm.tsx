@@ -110,10 +110,18 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
     return missing;
   };
 
+  const missingSection4Fields = () => {
+    const missing: string[] = [];
+    if (form.signature_text.trim().length < 3) missing.push("Full Legal Name (at least 3 characters)");
+    if (!signatureConfirm) missing.push("Confirmation checkbox");
+    return missing;
+  };
+
   const missingForSection = (s: number) => {
     if (s === 1) return missingSection1Fields();
     if (s === 2) return missingSection2Fields();
     if (s === 3) return missingSection3Fields();
+    if (s === 4) return missingSection4Fields();
     return [];
   };
 
@@ -412,8 +420,8 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
           </div>
         )}
 
-        {/* Validation error banner — shown when user clicks Next but required fields are missing */}
-        {showValidationError && section < 4 && missingForSection(section).length > 0 && (
+        {/* Validation error banner — shown when user clicks Next/Submit but required fields are missing */}
+        {showValidationError && missingForSection(section).length > 0 && (
           <div className="p-3 rounded-md border border-destructive bg-destructive/10 text-sm text-destructive">
             <p className="font-medium">Please complete these fields before continuing:</p>
             <ul className="list-disc pl-5 mt-1">
@@ -440,8 +448,12 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
             </Button>
           ) : (
             <Button
-              onClick={() => onComplete(form)}
-              disabled={!canSubmit || isSubmitting}
+              onClick={() => {
+                if (!canSubmit) { setShowValidationError(true); return; }
+                setShowValidationError(false);
+                onComplete(form);
+              }}
+              disabled={isSubmitting}
               className="min-w-[160px]"
             >
               <PenLine className="w-4 h-4 mr-2" />
