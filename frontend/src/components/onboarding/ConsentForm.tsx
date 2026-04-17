@@ -54,11 +54,18 @@ const ConsentForm = ({ onComplete, isSubmitting }: ConsentFormProps) => {
             </p>
 
             <h3 className="text-lg font-semibold">What Will Happen</h3>
+            <p className="mb-2">You will be assigned to one of two groups:</p>
+            <ul className="list-disc pl-5 space-y-1 mb-2">
+              <li>
+                <strong>Group 1 (Control):</strong> Use the assigned device daily for 20 minutes for a 90-day period.
+              </li>
+              <li>
+                <strong>Group 2 (Stepped):</strong> Use the assigned device daily for 20 minutes for the first 30 days, then increase daily usage to 25 minutes for days 31–60, and finally increase daily usage to 30 minutes for days 61–90.
+              </li>
+            </ul>
             <ul className="list-disc pl-5 space-y-1">
-              <li>You will be randomly assigned to either the treatment group (active PBM device) or the control group (sham device).</li>
-              <li>You will use the assigned device daily for 20 minutes over a 90-day period.</li>
               <li>You will log your therapy sessions in this portal each day.</li>
-              <li>You will complete health questionnaires at baseline, day 30, day 60, and day 90.</li>
+              <li>You will complete health questionnaires at baseline and at the end of the study (day 90).</li>
               <li>You will provide renal function lab results at baseline and day 90.</li>
             </ul>
 
