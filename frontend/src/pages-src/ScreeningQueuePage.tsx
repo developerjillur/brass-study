@@ -193,9 +193,9 @@ const ScreeningQueuePage = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { variant: "secondary" as const, icon: Clock, label: "Pending Review" },
+      pending: { variant: "secondary" as const, icon: Clock, label: "Awaiting Lab Results" },
       screener_sent: { variant: "outline" as const, icon: Activity, label: "Screener Sent" },
-      screener_completed: { variant: "default" as const, icon: Activity, label: "Screener Completed" },
+      screener_completed: { variant: "default" as const, icon: Activity, label: "Ready for Review" },
       eligible: { variant: "default" as const, icon: CheckCircle, label: "Eligible" },
       ineligible: { variant: "destructive" as const, icon: XCircle, label: "Ineligible" },
       invited: { variant: "default" as const, icon: Users, label: "Invited" },
@@ -238,8 +238,8 @@ const ScreeningQueuePage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Submissions</SelectItem>
-                  <SelectItem value="pending">Pending Review</SelectItem>
-                  <SelectItem value="screener_completed">Screener Completed</SelectItem>
+                  <SelectItem value="pending">Awaiting Lab Results</SelectItem>
+                  <SelectItem value="screener_completed">Ready for Review</SelectItem>
                   <SelectItem value="eligible">Eligible</SelectItem>
                   <SelectItem value="ineligible">Ineligible</SelectItem>
                   <SelectItem value="invited">Invited</SelectItem>
@@ -522,9 +522,9 @@ const ScreeningQueuePage = () => {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="pending">Pending Review</SelectItem>
+                                  <SelectItem value="pending">Awaiting Lab Results</SelectItem>
                                   <SelectItem value="screener_sent">Screener Sent</SelectItem>
-                                  <SelectItem value="screener_completed">Screener Completed</SelectItem>
+                                  <SelectItem value="screener_completed">Ready for Review</SelectItem>
                                   <SelectItem value="eligible">Eligible</SelectItem>
                                   <SelectItem value="ineligible">Ineligible</SelectItem>
                                   <SelectItem value="invited">Invited</SelectItem>
