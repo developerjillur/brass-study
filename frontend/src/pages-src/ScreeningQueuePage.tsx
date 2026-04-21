@@ -46,6 +46,7 @@ const ScreeningQueuePage = () => {
   const { userRole, loading } = useAuth();
   const [submissions, setSubmissions] = useState<ScreeningSubmission[]>([]);
   const [renalData, setRenalData] = useState<Record<string, RenalPanelData | null>>({});
+  const [enrolledEmails, setEnrolledEmails] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [invitingId, setInvitingId] = useState<string | null>(null);
@@ -59,6 +60,19 @@ const ScreeningQueuePage = () => {
 
 
       setSubmissions(submissionsData || []);
+
+      // Load enrolled-participant emails so we can flag screenings whose email
+      // already has a portal account (prevents the "Invite to Portal" button
+      // from appearing next to someone who's already been invited).
+      try {
+        const profiles = await apiClient.get("/api/users/profiles").catch(() => []);
+        const emails = new Set<string>(
+          ((profiles as any[]) || [])
+            .map((p: any) => (p.email || "").toLowerCase())
+            .filter(Boolean),
+        );
+        setEnrolledEmails(emails);
+      } catch {}
 
       // Load all renal panels and match to screening submissions by screening_id
       const allPanels = await apiClient.get("/api/renal-panels").catch(() => []);
@@ -296,8 +310,15 @@ const ScreeningQueuePage = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        {/* Invite button for eligible submissions */}
-                        {submission.status === "eligible" && (
+                        {/* If this email already has a portal account, show an Enrolled badge instead of Invite */}
+                        {submission.status === "eligible" && enrolledEmails.has(submission.email.toLowerCase()) && (
+                          <Badge variant="secondary" className="gap-1">
+                            <CheckCircle className="w-3 h-3" />
+                            Already Enrolled
+                          </Badge>
+                        )}
+                        {/* Invite button for eligible submissions whose email isn't already enrolled */}
+                        {submission.status === "eligible" && !enrolledEmails.has(submission.email.toLowerCase()) && (
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button variant="default" size="sm">
