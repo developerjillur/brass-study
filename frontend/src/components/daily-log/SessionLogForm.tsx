@@ -18,11 +18,12 @@ interface SessionLogFormProps {
   loggedDates?: string[];
   prescribedMinutes?: number | null;
   onSessionLogged: () => void;
+  forcePastMode?: boolean;
 }
 
 const APPLICATION_POINTS = ["Navel", "Left Wrist"];
 
-const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], prescribedMinutes, onSessionLogged }: SessionLogFormProps) => {
+const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], prescribedMinutes, onSessionLogged, forcePastMode = false }: SessionLogFormProps) => {
   const { toast } = useToast();
   const today = new Date().toISOString().split("T")[0];
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,8 +32,8 @@ const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], pr
   const [durationMinutes, setDurationMinutes] = useState<number | "">("");
   const [bodyArea, setBodyArea] = useState("");
   const [notes, setNotes] = useState("");
-  const [sessionDate, setSessionDate] = useState(today);
-  const [showPastDateForm, setShowPastDateForm] = useState(false);
+  const [sessionDate, setSessionDate] = useState(forcePastMode ? "" : today);
+  const [showPastDateForm, setShowPastDateForm] = useState(forcePastMode);
   const [justSubmitted, setJustSubmitted] = useState(false);
 
   // Calculate the study start date and min date for date picker
@@ -124,44 +125,18 @@ const SessionLogForm = ({ participant, userId, todayLogged, loggedDates = [], pr
     }
   };
 
-  // If today is logged and user hasn't opened the past-date form, show success + option to log past dates
+  // If today is logged and user is on "Today's Log" tab, show success (past-session tab handles its own flow)
   if (todayLogged && !showPastDateForm && !justSubmitted) {
     return (
-      <div className="space-y-4">
-        <Card className="shadow-card border-success/30 bg-success/5">
-          <CardContent className="py-10 text-center">
-            <CheckCircle2 className="w-14 h-14 text-success mx-auto mb-3" />
-            <h3 className="text-xl font-bold text-foreground mb-2">Today's Session Logged</h3>
-            <p className="text-muted-foreground">
-              You've already submitted your therapy log for today. Check the History tab to review it.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-soft border-dashed">
-          <CardContent className="py-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <CalendarDays className="w-5 h-5 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Need to log a missed day?</p>
-                  <p className="text-sm text-muted-foreground">You can submit a session log for a previous date.</p>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowPastDateForm(true);
-                  setSessionDate("");
-                }}
-              >
-                <CalendarDays className="w-4 h-4 mr-2" />
-                Log a Past Session
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="shadow-card border-success/30 bg-success/5">
+        <CardContent className="py-10 text-center">
+          <CheckCircle2 className="w-14 h-14 text-success mx-auto mb-3" />
+          <h3 className="text-xl font-bold text-foreground mb-2">Today's Session Logged</h3>
+          <p className="text-muted-foreground">
+            You've already submitted your therapy log for today. Use the <strong>Log Past Session</strong> tab to record a missed day, or check <strong>History</strong> to review past entries.
+          </p>
+        </CardContent>
+      </Card>
     );
   }
 

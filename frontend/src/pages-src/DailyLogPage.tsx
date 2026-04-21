@@ -10,7 +10,7 @@ import SessionLogForm from "@/components/daily-log/SessionLogForm";
 import SessionHistory from "@/components/daily-log/SessionHistory";
 import ComplianceSummary from "@/components/daily-log/ComplianceSummary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ClipboardList, History, BarChart3 } from "lucide-react";
+import { ClipboardList, History, BarChart3, CalendarDays } from "lucide-react";
 
 export interface ParticipantInfo {
   id: string;
@@ -112,10 +112,14 @@ const DailyLogPage = () => {
           </div>
 
           <Tabs defaultValue="log" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="log" className="flex items-center gap-2">
                 <ClipboardList className="w-4 h-4" />
                 Today's Log
+              </TabsTrigger>
+              <TabsTrigger value="past" className="flex items-center gap-2">
+                <CalendarDays className="w-4 h-4" />
+                Log Past Session
               </TabsTrigger>
               <TabsTrigger value="history" className="flex items-center gap-2">
                 <History className="w-4 h-4" />
@@ -135,6 +139,18 @@ const DailyLogPage = () => {
                 loggedDates={loggedDates}
                 prescribedMinutes={prescribedMinutes}
                 onSessionLogged={handleSessionLogged}
+              />
+            </TabsContent>
+
+            <TabsContent value="past">
+              <SessionLogForm
+                participant={participant}
+                userId={user!.id}
+                todayLogged={todayLogged}
+                loggedDates={loggedDates}
+                prescribedMinutes={prescribedMinutes}
+                onSessionLogged={handleSessionLogged}
+                forcePastMode
               />
             </TabsContent>
 
