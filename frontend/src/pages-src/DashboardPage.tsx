@@ -206,6 +206,12 @@ const DashboardPage = () => {
                   onClick={() => router.push("/messages")}
                   badge={unreadCount > 0 ? unreadCount : undefined}
                 />
+                <DashCard
+                  icon={<CalendarDays className="w-7 h-7" />}
+                  title="Schedule a Meeting"
+                  description="Book a check-in meeting with the research team."
+                  onClick={() => router.push("/schedule")}
+                />
               </div>
             </>
           )}
