@@ -37,7 +37,7 @@ const ResearcherOverviewPage = () => {
   });
   const [heatmapData, setHeatmapData] = useState<HeatmapDay[]>([]);
   const [participantNames, setParticipantNames] = useState<{ id: string; name: string }[]>([]);
-  const [maxDay, setMaxDay] = useState(84);
+  const [maxDay, setMaxDay] = useState(90);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const ResearcherOverviewPage = () => {
         for (const p of active) {
           const pDay = p.study_day ?? 0;
           const sMap = sessionMap.get(p.id) || new Map();
-          for (let d = 1; d <= 84; d++) {
+          for (let d = 1; d <= 90; d++) {
             const session = sMap.get(d);
             let status: HeatmapDay["status"] = "upcoming";
             if (d > pDay) status = "upcoming";

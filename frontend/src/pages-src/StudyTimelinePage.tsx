@@ -17,8 +17,8 @@ import CalendarGrid, { type DaySession } from "@/components/timeline/CalendarGri
 
 const MILESTONES = [
   { day: 1, label: "Study Start" },
-  { day: 42, label: "Midpoint (Week 6)" },
-  { day: 84, label: "Study End (Week 12)" },
+  { day: 45, label: "Midpoint (Week 6)" },
+  { day: 90, label: "Study End (Week 12)" },
 ];
 
 const StudyTimelinePage = () => {
@@ -29,7 +29,7 @@ const StudyTimelinePage = () => {
   const [sessions, setSessions] = useState<DaySession[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [onboardingPending, setOnboardingPending] = useState(false);
-  const totalDays = 84;
+  const totalDays = 90;
 
   useEffect(() => {
     if (!loading && !user) { router.push("/login"); return; }

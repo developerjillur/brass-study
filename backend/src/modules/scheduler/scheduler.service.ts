@@ -17,7 +17,7 @@ const ASSESSMENT_SCHEDULE = [
   { studyDay: 42, timePoint: 'week_6', label: 'Week 6' },
   { studyDay: 56, timePoint: 'week_8', label: 'Week 8' },
   { studyDay: 70, timePoint: 'week_10', label: 'Week 10' },
-  { studyDay: 84, timePoint: 'week_12', label: 'Week 12 (Final)' },
+  { studyDay: 90, timePoint: 'week_12', label: 'Week 12 (Final)' },
 ];
 const ASSESSMENT_WINDOW = 3;
 
@@ -67,7 +67,7 @@ export class SchedulerService {
     });
 
     for (const p of activeParticipants) {
-      if (p.studyDay && p.studyDay >= 84) {
+      if (p.studyDay && p.studyDay >= 90) {
         const assessmentCount = await this.assessmentRepo
           .createQueryBuilder('a')
           .select('COUNT(DISTINCT a.assessment_type)', 'cnt')

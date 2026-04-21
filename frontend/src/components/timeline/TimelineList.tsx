@@ -40,7 +40,7 @@ const dotColors: Record<string, string> = {
 const getIcon = (type: string, day: number) => {
   if (type === "assessment") return ClipboardList;
   if (type === "lab") return FlaskConical;
-  return day === 84 ? Flag : Milestone;
+  return day === 90 ? Flag : Milestone;
 };
 
 const TimelineList = ({ events, studyDay }: TimelineListProps) => {

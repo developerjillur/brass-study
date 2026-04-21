@@ -10,7 +10,7 @@ export interface ScheduledLab {
 }
 
 export const LAB_SCHEDULE: ScheduledLab[] = [
-  { studyDay: 84, timePoint: "week_12", label: "Week 12 Lab (Completion)" },
+  { studyDay: 90, timePoint: "week_12", label: "Week 12 Lab (Completion)" },
 ];
 
 export const LAB_WINDOW_DAYS = 7;

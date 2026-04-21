@@ -13,7 +13,7 @@ export interface ScheduledAssessment {
  */
 export const ASSESSMENT_SCHEDULE: ScheduledAssessment[] = [
   { studyDay: 0, timePoint: "baseline", label: "Baseline (Prior to Study)", assessments: [HADS, PHQ9, GAD7, PSS10] },
-  { studyDay: 84, timePoint: "week_12", label: "Week 12 (Completion)", assessments: [HADS, PHQ9, GAD7, PSS10] },
+  { studyDay: 90, timePoint: "week_12", label: "Week 12 (Completion)", assessments: [HADS, PHQ9, GAD7, PSS10] },
 ];
 
 /** Window in days: participants can complete assessments ±5 days from scheduled day */
