@@ -191,15 +191,25 @@ const ScreeningQueuePage = () => {
     );
   }
 
+  const STATUS_LABELS: Record<string, string> = {
+    pending: "Awaiting Lab Results",
+    screener_sent: "Screener Sent",
+    screener_completed: "Ready for Review",
+    eligible: "Eligible",
+    ineligible: "Ineligible",
+    invited: "Invited",
+    declined: "Declined",
+  };
+
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { variant: "secondary" as const, icon: Clock, label: "Awaiting Lab Results" },
-      screener_sent: { variant: "outline" as const, icon: Activity, label: "Screener Sent" },
-      screener_completed: { variant: "default" as const, icon: Activity, label: "Ready for Review" },
-      eligible: { variant: "default" as const, icon: CheckCircle, label: "Eligible" },
-      ineligible: { variant: "destructive" as const, icon: XCircle, label: "Ineligible" },
-      invited: { variant: "default" as const, icon: Users, label: "Invited" },
-      declined: { variant: "secondary" as const, icon: XCircle, label: "Declined" },
+      pending: { variant: "secondary" as const, icon: Clock, label: STATUS_LABELS.pending },
+      screener_sent: { variant: "outline" as const, icon: Activity, label: STATUS_LABELS.screener_sent },
+      screener_completed: { variant: "default" as const, icon: Activity, label: STATUS_LABELS.screener_completed },
+      eligible: { variant: "default" as const, icon: CheckCircle, label: STATUS_LABELS.eligible },
+      ineligible: { variant: "destructive" as const, icon: XCircle, label: STATUS_LABELS.ineligible },
+      invited: { variant: "default" as const, icon: Users, label: STATUS_LABELS.invited },
+      declined: { variant: "secondary" as const, icon: XCircle, label: STATUS_LABELS.declined },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
@@ -445,8 +455,11 @@ const ScreeningQueuePage = () => {
                                   </div>
                                   {submission.updated_at !== submission.created_at && (
                                     <div>
-                                      <FieldLabel>Status Changed</FieldLabel>
+                                      <FieldLabel>Status Last Updated</FieldLabel>
                                       <p>{new Date(submission.updated_at).toLocaleString()}</p>
+                                      <p className="text-xs text-muted-foreground mt-0.5">
+                                        (when the status last changed to "{STATUS_LABELS[submission.status] || submission.status}")
+                                      </p>
                                     </div>
                                   )}
                                 </div>
