@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RenalPanelSubmission } from './entities/renal-panel-submission.entity';
+import { ScreeningSubmission } from '../screening/entities/screening-submission.entity';
 
 @Injectable()
 export class RenalPanelsService {
   constructor(
     @InjectRepository(RenalPanelSubmission)
     private renalPanelRepo: Repository<RenalPanelSubmission>,
+    @InjectRepository(ScreeningSubmission)
+    private screeningRepo: Repository<ScreeningSubmission>,
   ) {}
 
   async createScreeningSubmission(data: Partial<RenalPanelSubmission>): Promise<RenalPanelSubmission> {
@@ -15,7 +18,18 @@ export class RenalPanelsService {
       ...data,
       submissionType: 'screening',
     });
-    return this.renalPanelRepo.save(submission);
+    const saved = await this.renalPanelRepo.save(submission);
+
+    // Advance the linked screening's status so it shows "Ready for Review"
+    // instead of being stuck on "Awaiting Lab Results".
+    if (saved.screeningId) {
+      const screening = await this.screeningRepo.findOne({ where: { id: saved.screeningId } });
+      if (screening && screening.status === 'pending') {
+        screening.status = 'screener_completed';
+        await this.screeningRepo.save(screening);
+      }
+    }
+    return saved;
   }
 
   async createBaselineSubmission(
