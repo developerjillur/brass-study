@@ -246,23 +246,26 @@ const OnboardingPage = () => {
                   You're All Set!
                 </h1>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Thank you for completing your study setup. The researcher will review your information and confirm your enrollment. 
-                  You'll receive a notification within 48 hours.
+                  Your study setup is complete. Sandra Brass will review your information and reach out to schedule your kickoff Zoom meeting where you'll receive your PBM light therapy device.
                 </p>
                 <div className="space-y-3 text-left bg-muted/30 rounded-lg p-5 mb-6">
-                  <h3 className="font-semibold text-foreground text-sm">What happens next?</h3>
+                  <h3 className="font-semibold text-foreground text-sm">Next steps:</h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      Your study dashboard is now active
+                      <span><strong>Schedule a Zoom meeting</strong> with the research team from your dashboard</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      Submit your daily therapy log each day
+                      <span>Submit your <strong>daily therapy log</strong> once your device arrives and you start sessions</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      Check Messages for updates from your research team
+                      <span>Watch <strong>Messages</strong> on your dashboard for updates from Sandra</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Submit your <strong>follow-up lab results</strong> at Day 90 (you'll get a reminder)</span>
                     </li>
                   </ul>
                 </div>

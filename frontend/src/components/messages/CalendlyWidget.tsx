@@ -67,12 +67,12 @@ const CalendlyWidget = ({ calendlyUrl }: CalendlyWidgetProps) => {
               title="Schedule a meeting"
             />
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setIsExpanded(false)}
               className="mt-2"
             >
-              Collapse
+              Hide Scheduler
             </Button>
           </div>
         )}

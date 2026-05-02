@@ -43,6 +43,19 @@ export class SchedulerService {
     private emailService: EmailService,
   ) {}
 
+  /**
+   * Filter out fake/test addresses so the scheduler doesn't burn SendGrid
+   * quota on @test.com / @example.com emails that will always bounce.
+   */
+  private isRealEmail(email?: string | null): boolean {
+    if (!email) return false;
+    const lower = email.toLowerCase();
+    if (lower.endsWith('@test.com')) return false;
+    if (lower.endsWith('@example.com')) return false;
+    if (lower.endsWith('@example.org')) return false;
+    return true;
+  }
+
   @Cron('0 0 * * *') // Midnight daily
   async updateStudyDays() {
     this.logger.log('Running updateStudyDays...');
@@ -126,7 +139,7 @@ export class SchedulerService {
 
           // Send email
           const profile = await this.profileRepo.findOne({ where: { userId: p.userId } });
-          if (profile?.email) {
+          if (profile && this.isRealEmail(profile.email)) {
             await this.emailService.sendAssessmentReminderEmail(
               profile.email,
               profile.fullName,
@@ -175,7 +188,7 @@ export class SchedulerService {
           });
 
           const profile = await this.profileRepo.findOne({ where: { userId: p.userId } });
-          if (profile?.email) {
+          if (profile && this.isRealEmail(profile.email)) {
             await this.emailService.sendMissedSessionEmail(
               profile.email,
               profile.fullName,

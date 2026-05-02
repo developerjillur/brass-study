@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { apiClient } from "@/lib/api-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,6 +64,28 @@ const DemographicsForm = ({ onComplete, isSubmitting }: DemographicsFormProps) =
     signature_text: "",
   });
   const [signatureConfirm, setSignatureConfirm] = useState(false);
+
+  // Pre-fill DOB from existing Profile so participants don't have to enter it twice
+  useEffect(() => {
+    apiClient.get("/api/users/me/profile")
+      .then((profile: any) => {
+        if (profile?.date_of_birth) {
+          const dob = profile.date_of_birth.split("T")[0]; // strip time portion
+          setForm(prev => {
+            // Only set if user hasn't typed anything
+            if (prev.date_of_birth) return prev;
+            // Compute age from the prefilled DOB
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let calcAge = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) calcAge--;
+            return { ...prev, date_of_birth: dob, age: calcAge };
+          });
+        }
+      })
+      .catch(() => {/* no profile yet, leave blank */});
+  }, []);
 
   const update = (key: keyof DemographicsData, value: any) =>
     setForm((prev) => ({ ...prev, [key]: value }));
